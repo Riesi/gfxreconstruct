@@ -5659,6 +5659,52 @@ std::string ToString(const D3D11_TILE_COPY_FLAG& value)
     return "Unhandled D3D11_TILE_COPY_FLAG";
 }
 
+std::string ToString(const D3D11_CONTEXT_TYPE& value)
+{
+    switch (value) {
+    case D3D11_CONTEXT_TYPE_ALL: return "D3D11_CONTEXT_TYPE_ALL";
+    case D3D11_CONTEXT_TYPE_3D: return "D3D11_CONTEXT_TYPE_3D";
+    case D3D11_CONTEXT_TYPE_COMPUTE: return "D3D11_CONTEXT_TYPE_COMPUTE";
+    case D3D11_CONTEXT_TYPE_COPY: return "D3D11_CONTEXT_TYPE_COPY";
+    case D3D11_CONTEXT_TYPE_VIDEO: return "D3D11_CONTEXT_TYPE_VIDEO";
+    default: break;
+    }
+    return "Unhandled D3D11_CONTEXT_TYPE";
+}
+
+std::string ToString(const D3D11_TEXTURE_LAYOUT& value)
+{
+    switch (value) {
+    case D3D11_TEXTURE_LAYOUT_UNDEFINED: return "D3D11_TEXTURE_LAYOUT_UNDEFINED";
+    case D3D11_TEXTURE_LAYOUT_ROW_MAJOR: return "D3D11_TEXTURE_LAYOUT_ROW_MAJOR";
+    case D3D11_TEXTURE_LAYOUT_64K_STANDARD_SWIZZLE: return "D3D11_TEXTURE_LAYOUT_64K_STANDARD_SWIZZLE";
+    default: break;
+    }
+    return "Unhandled D3D11_TEXTURE_LAYOUT";
+}
+
+std::string ToString(const D3D11_CONSERVATIVE_RASTERIZATION_MODE& value)
+{
+    switch (value) {
+    case D3D11_CONSERVATIVE_RASTERIZATION_MODE_OFF: return "D3D11_CONSERVATIVE_RASTERIZATION_MODE_OFF";
+    case D3D11_CONSERVATIVE_RASTERIZATION_MODE_ON: return "D3D11_CONSERVATIVE_RASTERIZATION_MODE_ON";
+    default: break;
+    }
+    return "Unhandled D3D11_CONSERVATIVE_RASTERIZATION_MODE";
+}
+
+std::string ToString(const D3D11_FENCE_FLAG& value)
+{
+    switch (value) {
+    case D3D11_FENCE_FLAG_NONE: return "D3D11_FENCE_FLAG_NONE";
+    case D3D11_FENCE_FLAG_SHARED: return "D3D11_FENCE_FLAG_SHARED";
+    case D3D11_FENCE_FLAG_SHARED_CROSS_ADAPTER: return "D3D11_FENCE_FLAG_SHARED_CROSS_ADAPTER";
+    case D3D11_FENCE_FLAG_NON_MONITORED: return "D3D11_FENCE_FLAG_NON_MONITORED";
+    default: break;
+    }
+    return "Unhandled D3D11_FENCE_FLAG";
+}
+
 template <> std::string ToString<IID>(const IID& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize) { return ToString(obj); }
 std::string ToString(const IID& iid)
 {
@@ -5918,6 +5964,17 @@ std::string ToString(const IID& iid)
     if (iid == IID_ID3DUserDefinedAnnotation) return "\"IID_ID3DUserDefinedAnnotation\"";
     if (iid == IID_ID3D11DeviceContext2) return "\"IID_ID3D11DeviceContext2\"";
     if (iid == IID_ID3D11Device2) return "\"IID_ID3D11Device2\"";
+    if (iid == IID_ID3D11Texture2D1) return "\"IID_ID3D11Texture2D1\"";
+    if (iid == IID_ID3D11Texture3D1) return "\"IID_ID3D11Texture3D1\"";
+    if (iid == IID_ID3D11RasterizerState2) return "\"IID_ID3D11RasterizerState2\"";
+    if (iid == IID_ID3D11ShaderResourceView1) return "\"IID_ID3D11ShaderResourceView1\"";
+    if (iid == IID_ID3D11RenderTargetView1) return "\"IID_ID3D11RenderTargetView1\"";
+    if (iid == IID_ID3D11UnorderedAccessView1) return "\"IID_ID3D11UnorderedAccessView1\"";
+    if (iid == IID_ID3D11Query1) return "\"IID_ID3D11Query1\"";
+    if (iid == IID_ID3D11DeviceContext3) return "\"IID_ID3D11DeviceContext3\"";
+    if (iid == IID_ID3D11Fence) return "\"IID_ID3D11Fence\"";
+    if (iid == IID_ID3D11DeviceContext4) return "\"IID_ID3D11DeviceContext4\"";
+    if (iid == IID_ID3D11Device3) return "\"IID_ID3D11Device3\"";
     if (iid == IID_IUnknown) return "\"IID_IUnknown\"";
     return "\"Invalid IID\"";
 }

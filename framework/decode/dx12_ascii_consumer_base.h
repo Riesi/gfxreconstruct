@@ -115,6 +115,31 @@ class Dx12AsciiConsumerBase : public Dx12Consumer
                                                          UINT                                     SrcDepthPitch,
                                                          UINT                                     CopyFlags) override;
 
+    virtual void
+    Process_ID3D11Device3_CreateTexture2D1(const ApiCallInfo&                                    call_info,
+                                           format::HandleId                                      object_id,
+                                           HRESULT                                               return_value,
+                                           StructPointerDecoder<Decoded_D3D11_TEXTURE2D_DESC1>*  pDesc,
+                                           StructPointerDecoder<Decoded_D3D11_SUBRESOURCE_DATA>* pInitialData,
+                                           HandlePointerDecoder<ID3D11Texture2D1*>*              ppTexture2D) override;
+
+    virtual void
+    Process_ID3D11Device3_CreateTexture3D1(const ApiCallInfo&                                    call_info,
+                                           format::HandleId                                      object_id,
+                                           HRESULT                                               return_value,
+                                           StructPointerDecoder<Decoded_D3D11_TEXTURE3D_DESC1>*  pDesc,
+                                           StructPointerDecoder<Decoded_D3D11_SUBRESOURCE_DATA>* pInitialData,
+                                           HandlePointerDecoder<ID3D11Texture3D1*>*              ppTexture3D) override;
+
+    virtual void Process_ID3D11Device3_WriteToSubresource(const ApiCallInfo&                       call_info,
+                                                          format::HandleId                         object_id,
+                                                          format::HandleId                         pDstResource,
+                                                          UINT                                     DstSubresource,
+                                                          StructPointerDecoder<Decoded_D3D11_BOX>* pDstBox,
+                                                          PointerDecoder<uint8_t>*                 pSrcData,
+                                                          UINT                                     SrcRowPitch,
+                                                          UINT SrcDepthPitch) override;
+
   protected:
     FILE*                         GetFile() const { return file_; }
     uint32_t                      current_frame_number_{ 0 };

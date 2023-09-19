@@ -31,6 +31,7 @@
 
 #include <d3d12.h>
 #include <d3d11.h>
+#include <d3d11_3.h>
 
 #include <string>
 
@@ -188,6 +189,24 @@ std::string ToString<D3D11_DEPTH_STENCIL_VIEW_DESC>(const D3D11_DEPTH_STENCIL_VI
                                                     ToStringFlags                        toStringFlags,
                                                     uint32_t                             tabCount,
                                                     uint32_t                             tabSize);
+
+template <>
+std::string ToString<D3D11_SHADER_RESOURCE_VIEW_DESC1>(const D3D11_SHADER_RESOURCE_VIEW_DESC1& obj,
+                                                       ToStringFlags                           toStringFlags,
+                                                       uint32_t                                tabCount,
+                                                       uint32_t                                tabSize);
+
+template <>
+std::string ToString<D3D11_UNORDERED_ACCESS_VIEW_DESC1>(const D3D11_UNORDERED_ACCESS_VIEW_DESC1& obj,
+                                                        ToStringFlags                            toStringFlags,
+                                                        uint32_t                                 tabCount,
+                                                        uint32_t                                 tabSize);
+
+template <>
+std::string ToString<D3D11_RENDER_TARGET_VIEW_DESC1>(const D3D11_RENDER_TARGET_VIEW_DESC1& obj,
+                                                     ToStringFlags                         toStringFlags,
+                                                     uint32_t                              tabCount,
+                                                     uint32_t                              tabSize);
 
 template <>
 std::string ToString<D3D11_VIDEO_COLOR>(const D3D11_VIDEO_COLOR& obj,
