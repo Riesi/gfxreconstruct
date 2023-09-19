@@ -16110,7 +16110,7 @@ void Dx12AsciiConsumer::Process_ID3D11VideoContext_GetDecoderBuffer(
         format::HandleId pDecoder,
         D3D11_VIDEO_DECODER_BUFFER_TYPE Type,
         PointerDecoder<UINT>* pBufferSize,
-        PointerDecoder<uint8_t>* ppBuffer)
+        PointerDecoder<uint8_t, void*>* ppBuffer)
 {
     using namespace gfxrecon::util;
     uint32_t tab_count = 0;

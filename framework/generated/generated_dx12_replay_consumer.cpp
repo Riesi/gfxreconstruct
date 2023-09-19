@@ -11976,12 +11976,24 @@ void Dx12ReplayConsumer::Process_ID3D11VideoContext_GetDecoderBuffer(
     format::HandleId                            pDecoder,
     D3D11_VIDEO_DECODER_BUFFER_TYPE             Type,
     PointerDecoder<UINT>*                       pBufferSize,
-    PointerDecoder<uint8_t>*                    ppBuffer)
+    PointerDecoder<uint8_t, void*>*             ppBuffer)
 {
     auto replay_object = MapObject<ID3D11VideoContext>(object_id);
     if (replay_object != nullptr)
     {
-        auto replay_result = S_OK;
+        auto in_pDecoder = MapObject<ID3D11VideoDecoder>(pDecoder);
+        if(!pBufferSize->IsNull())
+        {
+            pBufferSize->AllocateOutputData(1);
+        }
+        if(!ppBuffer->IsNull())
+        {
+            ppBuffer->AllocateOutputData(1);
+        }
+        auto replay_result = replay_object->GetDecoderBuffer(in_pDecoder,
+                                                             Type,
+                                                             pBufferSize->GetOutputPointer(),
+                                                             ppBuffer->GetOutputPointer());
         CheckReplayResult("ID3D11VideoContext_GetDecoderBuffer", return_value, replay_result);
     }
 }

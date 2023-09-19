@@ -4410,7 +4410,7 @@ class Dx12AsciiConsumer : public Dx12AsciiConsumerBase
         format::HandleId pDecoder,
         D3D11_VIDEO_DECODER_BUFFER_TYPE Type,
         PointerDecoder<UINT>* pBufferSize,
-        PointerDecoder<uint8_t>* ppBuffer);
+        PointerDecoder<uint8_t, void*>* ppBuffer);
 
     virtual void Process_ID3D11VideoContext_ReleaseDecoderBuffer(
         const ApiCallInfo& call_info,

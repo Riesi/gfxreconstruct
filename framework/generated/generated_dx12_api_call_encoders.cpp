@@ -14455,7 +14455,7 @@ void Encode_ID3D11VideoContext_GetDecoderBuffer(
         encoder->EncodeObjectValue(pDecoder);
         encoder->EncodeEnumValue(Type);
         encoder->EncodeUInt32Ptr(pBufferSize, omit_output_data);
-        encoder->EncodeVoidArray(ppBuffer, * pBufferSize, omit_output_data);
+        encoder->EncodeVoidArray(*ppBuffer, * pBufferSize, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }

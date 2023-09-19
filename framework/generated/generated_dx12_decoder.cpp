@@ -15237,7 +15237,7 @@ size_t Dx12Decoder::Decode_ID3D11VideoContext_GetDecoderBuffer(format::HandleId 
     format::HandleId pDecoder;
     D3D11_VIDEO_DECODER_BUFFER_TYPE Type;
     PointerDecoder<UINT> pBufferSize;
-    PointerDecoder<uint8_t> ppBuffer;
+    PointerDecoder<uint8_t, void*> ppBuffer;
     HRESULT return_value;
 
     bytes_read += ValueDecoder::DecodeHandleIdValue((parameter_buffer + bytes_read), (buffer_size - bytes_read), &pDecoder);

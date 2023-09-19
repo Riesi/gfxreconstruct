@@ -161,10 +161,19 @@ class Dx12ApiCallEncodersBodyGenerator(Dx12ApiCallEncodersHeaderGenerator):
             omit_output_data = ', omit_output_data'
 
         if value.array_length and type(value.array_length) == str:
-            return 'encoder->Encode{}Array({}{}, {}{}{});'.format(
-                function_name, write_parameter_value, value.name,
-                write_parameter_value, value.array_length, omit_output_data
-            )
+            if '_result_bytebuffer_' in value.full_type:
+                # This is a void** pointer to a memory allocation with a size defined by value.array_length,
+                # not a void* array. For this case, we will encode the content of the memory allocation, and
+                # need to dereference the void** pointer.
+                return 'encoder->Encode{}Array(*{}{}, {}{}{});'.format(
+                    function_name, write_parameter_value, value.name,
+                    write_parameter_value, value.array_length, omit_output_data
+                )
+            else:
+                return 'encoder->Encode{}Array({}{}, {}{}{});'.format(
+                    function_name, write_parameter_value, value.name,
+                    write_parameter_value, value.array_length, omit_output_data
+                )
 
         elif value.pointer_count == 1:
             if value.array_capacity == 0:
