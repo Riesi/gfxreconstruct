@@ -22093,6 +22093,221 @@ void Dx12AsciiConsumer::Process_ID3D11VideoContext3_SubmitDecoderBuffers2(
 }
 
 /*
+** This part is generated from d3d11on12.h in Windows SDK: 10.0.20348.0
+**
+*/
+void Dx12AsciiConsumer::Process_D3D11On12CreateDevice(
+        const ApiCallInfo& call_info,
+        HRESULT return_value,
+        format::HandleId pDevice,
+        UINT Flags,
+        PointerDecoder<D3D_FEATURE_LEVEL>* pFeatureLevels,
+        UINT FeatureLevels,
+        HandlePointerDecoder<IUnknown*>* ppCommandQueues,
+        UINT NumQueues,
+        UINT NodeMask,
+        HandlePointerDecoder<ID3D11Device*>* ppDevice,
+        HandlePointerDecoder<ID3D11DeviceContext*>* ppImmediateContext,
+        PointerDecoder<D3D_FEATURE_LEVEL>* pChosenFeatureLevel)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = nullptr;
+    writeApiCallToFileInfo.handleId = 0;
+    writeApiCallToFileInfo.pFunctionName = "D3D11On12CreateDevice";
+    std::string returnValue = ToString(return_value);
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "pDevice", to_string_flags_, tab_count, tab_size, HandleIdToString(pDevice));
+            FieldToString(str_strm, false, "Flags", to_string_flags_, tab_count, tab_size, ToString(Flags, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "pFeatureLevels", to_string_flags_, tab_count, tab_size, EnumPointerDecoderArrayToString(FeatureLevels, pFeatureLevels, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "FeatureLevels", to_string_flags_, tab_count, tab_size, ToString(FeatureLevels, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "ppCommandQueues", to_string_flags_, tab_count, tab_size, PointerDecoderArrayToString(NumQueues, ppCommandQueues, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "NumQueues", to_string_flags_, tab_count, tab_size, ToString(NumQueues, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "NodeMask", to_string_flags_, tab_count, tab_size, ToString(NodeMask, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "[out]ppDevice", to_string_flags_, tab_count, tab_size, OutPtrDecoderToString(ppDevice));
+            FieldToString(str_strm, false, "[out]ppImmediateContext", to_string_flags_, tab_count, tab_size, OutPtrDecoderToString(ppImmediateContext));
+            FieldToString(str_strm, false, "[out]pChosenFeatureLevel", to_string_flags_, tab_count, tab_size, EnumPointerDecoderToString(pChosenFeatureLevel));
+        }
+    );
+}
+
+void Dx12AsciiConsumer::Process_ID3D11On12Device_CreateWrappedResource(
+        const ApiCallInfo& call_info,
+        format::HandleId object_id,
+        HRESULT return_value,
+        format::HandleId pResource12,
+        StructPointerDecoder<Decoded_D3D11_RESOURCE_FLAGS>* pFlags11,
+        D3D12_RESOURCE_STATES InState,
+        D3D12_RESOURCE_STATES OutState,
+        Decoded_GUID riid,
+        HandlePointerDecoder<void*>* ppResource11)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11On12Device";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "CreateWrappedResource";
+    std::string returnValue = ToString(return_value);
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "pResource12", to_string_flags_, tab_count, tab_size, HandleIdToString(pResource12));
+            FieldToString(str_strm, false, "pFlags11", to_string_flags_, tab_count, tab_size, StructPointerDecoderToString(pFlags11, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "InState", to_string_flags_, tab_count, tab_size, Quote(ToString(InState)));
+            FieldToString(str_strm, false, "OutState", to_string_flags_, tab_count, tab_size, Quote(ToString(OutState)));
+            FieldToString(str_strm, false, "riid", to_string_flags_, tab_count, tab_size, ToString(*riid.decoded_value, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "[out]ppResource11", to_string_flags_, tab_count, tab_size, OutPtrDecoderToString(ppResource11));
+        }
+    );
+}
+
+void Dx12AsciiConsumer::Process_ID3D11On12Device_ReleaseWrappedResources(
+        const ApiCallInfo& call_info,
+        format::HandleId object_id,
+        HandlePointerDecoder<ID3D11Resource*>* ppResources,
+        UINT NumResources)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11On12Device";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "ReleaseWrappedResources";
+    std::string returnValue = std::string();
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "ppResources", to_string_flags_, tab_count, tab_size, PointerDecoderArrayToString(NumResources, ppResources, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "NumResources", to_string_flags_, tab_count, tab_size, ToString(NumResources, to_string_flags_, tab_count, tab_size));
+        }
+    );
+}
+
+void Dx12AsciiConsumer::Process_ID3D11On12Device_AcquireWrappedResources(
+        const ApiCallInfo& call_info,
+        format::HandleId object_id,
+        HandlePointerDecoder<ID3D11Resource*>* ppResources,
+        UINT NumResources)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11On12Device";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "AcquireWrappedResources";
+    std::string returnValue = std::string();
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "ppResources", to_string_flags_, tab_count, tab_size, PointerDecoderArrayToString(NumResources, ppResources, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "NumResources", to_string_flags_, tab_count, tab_size, ToString(NumResources, to_string_flags_, tab_count, tab_size));
+        }
+    );
+}
+
+void Dx12AsciiConsumer::Process_ID3D11On12Device1_GetD3D12Device(
+        const ApiCallInfo& call_info,
+        format::HandleId object_id,
+        HRESULT return_value,
+        Decoded_GUID riid,
+        HandlePointerDecoder<void*>* ppvDevice)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11On12Device1";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "GetD3D12Device";
+    std::string returnValue = ToString(return_value);
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "riid", to_string_flags_, tab_count, tab_size, ToString(*riid.decoded_value, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "[out]ppvDevice", to_string_flags_, tab_count, tab_size, OutPtrDecoderToString(ppvDevice));
+        }
+    );
+}
+
+void Dx12AsciiConsumer::Process_ID3D11On12Device2_UnwrapUnderlyingResource(
+        const ApiCallInfo& call_info,
+        format::HandleId object_id,
+        HRESULT return_value,
+        format::HandleId pResource11,
+        format::HandleId pCommandQueue,
+        Decoded_GUID riid,
+        HandlePointerDecoder<void*>* ppvResource12)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11On12Device2";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "UnwrapUnderlyingResource";
+    std::string returnValue = ToString(return_value);
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "pResource11", to_string_flags_, tab_count, tab_size, HandleIdToString(pResource11));
+            FieldToString(str_strm, false, "pCommandQueue", to_string_flags_, tab_count, tab_size, HandleIdToString(pCommandQueue));
+            FieldToString(str_strm, false, "riid", to_string_flags_, tab_count, tab_size, ToString(*riid.decoded_value, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "[out]ppvResource12", to_string_flags_, tab_count, tab_size, OutPtrDecoderToString(ppvResource12));
+        }
+    );
+}
+
+void Dx12AsciiConsumer::Process_ID3D11On12Device2_ReturnUnderlyingResource(
+        const ApiCallInfo& call_info,
+        format::HandleId object_id,
+        HRESULT return_value,
+        format::HandleId pResource11,
+        UINT NumSync,
+        PointerDecoder<UINT64>* pSignalValues,
+        HandlePointerDecoder<ID3D12Fence*>* ppFences)
+{
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11On12Device2";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "ReturnUnderlyingResource";
+    std::string returnValue = ToString(return_value);
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(
+        writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "pResource11", to_string_flags_, tab_count, tab_size, HandleIdToString(pResource11));
+            FieldToString(str_strm, false, "NumSync", to_string_flags_, tab_count, tab_size, ToString(NumSync, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "pSignalValues", to_string_flags_, tab_count, tab_size, PointerDecoderArrayToString(NumSync, pSignalValues, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "ppFences", to_string_flags_, tab_count, tab_size, PointerDecoderArrayToString(NumSync, ppFences, to_string_flags_, tab_count, tab_size));
+        }
+    );
+}
+
+/*
 ** This part is generated from Unknwnbase.h in Windows SDK: 10.0.20348.0
 **
 */

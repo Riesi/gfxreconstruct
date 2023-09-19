@@ -5134,6 +5134,19 @@ std::string ToString(const D3D11_FEATURE_DATA_D3D11_OPTIONS4& obj, ToStringFlags
     );
 }
 
+std::string ToString(const D3D11_RESOURCE_FLAGS& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize)
+{
+    return ObjectToString(toStringFlags, tabCount, tabSize,
+        [&](std::stringstream& strStrm)
+        {
+            FieldToString(strStrm, true, "BindFlags", toStringFlags, tabCount, tabSize, ToString(obj.BindFlags, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "MiscFlags", toStringFlags, tabCount, tabSize, ToString(obj.MiscFlags, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "CPUAccessFlags", toStringFlags, tabCount, tabSize, ToString(obj.CPUAccessFlags, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "StructureByteStride", toStringFlags, tabCount, tabSize, ToString(obj.StructureByteStride, toStringFlags, tabCount, tabSize));
+        }
+    );
+}
+
 std::string ToString(const tagRECT& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize)
 {
     return ObjectToString(toStringFlags, tabCount, tabSize,
