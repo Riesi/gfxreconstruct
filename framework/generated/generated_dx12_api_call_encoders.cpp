@@ -214,7 +214,7 @@ void Encode_IDXGIObject_GetPrivateData(
         }
         EncodeStruct(encoder, Name);
         encoder->EncodeUInt32Ptr(pDataSize, omit_output_data);
-        encoder->EncodeVoidArray(pData, * pDataSize, omit_output_data);
+        encoder->EncodeVoidArray(pData, (pDataSize != nullptr) ? *pDataSize : 0, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -3820,7 +3820,7 @@ void Encode_ID3D12Object_GetPrivateData(
         }
         EncodeStruct(encoder, guid);
         encoder->EncodeUInt32Ptr(pDataSize, omit_output_data);
-        encoder->EncodeVoidArray(pData, * pDataSize, omit_output_data);
+        encoder->EncodeVoidArray(pData, (pDataSize != nullptr) ? *pDataSize : 0, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -8976,7 +8976,7 @@ void Encode_ID3D12ShaderCacheSession_FindValue(
         }
         encoder->EncodeVoidArray(pKey, KeySize);
         encoder->EncodeUInt32Value(KeySize);
-        encoder->EncodeVoidArray(pValue, * pValueSize, omit_output_data);
+        encoder->EncodeVoidArray(pValue, (pValueSize != nullptr) ? *pValueSize : 0, omit_output_data);
         encoder->EncodeUInt32Ptr(pValueSize, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
@@ -11130,7 +11130,7 @@ void Encode_ID3D11DeviceChild_GetPrivateData(
         }
         EncodeStruct(encoder, guid);
         encoder->EncodeUInt32Ptr(pDataSize, omit_output_data);
-        encoder->EncodeVoidArray(pData, * pDataSize, omit_output_data);
+        encoder->EncodeVoidArray(pData, (pDataSize != nullptr) ? *pDataSize : 0, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -13072,7 +13072,7 @@ void Encode_ID3D11DeviceContext_PSGetShader(
     if(encoder)
     {
         encoder->EncodeObjectPtr(ppPixelShader);
-        encoder->EncodeObjectArray(ppClassInstances, * pNumClassInstances);
+        encoder->EncodeObjectArray(ppClassInstances, (pNumClassInstances != nullptr) ? *pNumClassInstances : 0);
         encoder->EncodeUInt32Ptr(pNumClassInstances);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -13104,7 +13104,7 @@ void Encode_ID3D11DeviceContext_VSGetShader(
     if(encoder)
     {
         encoder->EncodeObjectPtr(ppVertexShader);
-        encoder->EncodeObjectArray(ppClassInstances, * pNumClassInstances);
+        encoder->EncodeObjectArray(ppClassInstances, (pNumClassInstances != nullptr) ? *pNumClassInstances : 0);
         encoder->EncodeUInt32Ptr(pNumClassInstances);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -13200,7 +13200,7 @@ void Encode_ID3D11DeviceContext_GSGetShader(
     if(encoder)
     {
         encoder->EncodeObjectPtr(ppGeometryShader);
-        encoder->EncodeObjectArray(ppClassInstances, * pNumClassInstances);
+        encoder->EncodeObjectArray(ppClassInstances, (pNumClassInstances != nullptr) ? *pNumClassInstances : 0);
         encoder->EncodeUInt32Ptr(pNumClassInstances);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -13444,7 +13444,7 @@ void Encode_ID3D11DeviceContext_HSGetShader(
     if(encoder)
     {
         encoder->EncodeObjectPtr(ppHullShader);
-        encoder->EncodeObjectArray(ppClassInstances, * pNumClassInstances);
+        encoder->EncodeObjectArray(ppClassInstances, (pNumClassInstances != nullptr) ? *pNumClassInstances : 0);
         encoder->EncodeUInt32Ptr(pNumClassInstances);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -13508,7 +13508,7 @@ void Encode_ID3D11DeviceContext_DSGetShader(
     if(encoder)
     {
         encoder->EncodeObjectPtr(ppDomainShader);
-        encoder->EncodeObjectArray(ppClassInstances, * pNumClassInstances);
+        encoder->EncodeObjectArray(ppClassInstances, (pNumClassInstances != nullptr) ? *pNumClassInstances : 0);
         encoder->EncodeUInt32Ptr(pNumClassInstances);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -13588,7 +13588,7 @@ void Encode_ID3D11DeviceContext_CSGetShader(
     if(encoder)
     {
         encoder->EncodeObjectPtr(ppComputeShader);
-        encoder->EncodeObjectArray(ppClassInstances, * pNumClassInstances);
+        encoder->EncodeObjectArray(ppClassInstances, (pNumClassInstances != nullptr) ? *pNumClassInstances : 0);
         encoder->EncodeUInt32Ptr(pNumClassInstances);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -14455,7 +14455,7 @@ void Encode_ID3D11VideoContext_GetDecoderBuffer(
         encoder->EncodeObjectValue(pDecoder);
         encoder->EncodeEnumValue(Type);
         encoder->EncodeUInt32Ptr(pBufferSize, omit_output_data);
-        encoder->EncodeVoidArray(*ppBuffer, * pBufferSize, omit_output_data);
+        encoder->EncodeVoidArray((ppBuffer != nullptr) ? *ppBuffer : nullptr, (pBufferSize != nullptr) ? *pBufferSize : 0, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }
@@ -16566,7 +16566,7 @@ void Encode_ID3D11Device_GetPrivateData(
         }
         EncodeStruct(encoder, guid);
         encoder->EncodeUInt32Ptr(pDataSize, omit_output_data);
-        encoder->EncodeVoidArray(pData, * pDataSize, omit_output_data);
+        encoder->EncodeVoidArray(pData, (pDataSize != nullptr) ? *pDataSize : 0, omit_output_data);
         encoder->EncodeInt32Value(return_value);
         D3D12CaptureManager::Get()->EndMethodCallCapture();
     }

@@ -36113,7 +36113,7 @@ void STDMETHODCALLTYPE ID3D11DeviceContext_Wrapper::PSGetShader(
             pNumClassInstances);
 
         WrapObject(IID_ID3D11PixelShader, reinterpret_cast<void**>(ppPixelShader), nullptr);
-        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), * pNumClassInstances, nullptr);
+        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), (pNumClassInstances != nullptr) ? *pNumClassInstances : 0, nullptr);
 
         Encode_ID3D11DeviceContext_PSGetShader(
             this,
@@ -36234,7 +36234,7 @@ void STDMETHODCALLTYPE ID3D11DeviceContext_Wrapper::VSGetShader(
             pNumClassInstances);
 
         WrapObject(IID_ID3D11VertexShader, reinterpret_cast<void**>(ppVertexShader), nullptr);
-        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), * pNumClassInstances, nullptr);
+        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), (pNumClassInstances != nullptr) ? *pNumClassInstances : 0, nullptr);
 
         Encode_ID3D11DeviceContext_VSGetShader(
             this,
@@ -36595,7 +36595,7 @@ void STDMETHODCALLTYPE ID3D11DeviceContext_Wrapper::GSGetShader(
             pNumClassInstances);
 
         WrapObject(IID_ID3D11GeometryShader, reinterpret_cast<void**>(ppGeometryShader), nullptr);
-        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), * pNumClassInstances, nullptr);
+        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), (pNumClassInstances != nullptr) ? *pNumClassInstances : 0, nullptr);
 
         Encode_ID3D11DeviceContext_GSGetShader(
             this,
@@ -37517,7 +37517,7 @@ void STDMETHODCALLTYPE ID3D11DeviceContext_Wrapper::HSGetShader(
             pNumClassInstances);
 
         WrapObject(IID_ID3D11HullShader, reinterpret_cast<void**>(ppHullShader), nullptr);
-        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), * pNumClassInstances, nullptr);
+        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), (pNumClassInstances != nullptr) ? *pNumClassInstances : 0, nullptr);
 
         Encode_ID3D11DeviceContext_HSGetShader(
             this,
@@ -37758,7 +37758,7 @@ void STDMETHODCALLTYPE ID3D11DeviceContext_Wrapper::DSGetShader(
             pNumClassInstances);
 
         WrapObject(IID_ID3D11DomainShader, reinterpret_cast<void**>(ppDomainShader), nullptr);
-        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), * pNumClassInstances, nullptr);
+        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), (pNumClassInstances != nullptr) ? *pNumClassInstances : 0, nullptr);
 
         Encode_ID3D11DeviceContext_DSGetShader(
             this,
@@ -38059,7 +38059,7 @@ void STDMETHODCALLTYPE ID3D11DeviceContext_Wrapper::CSGetShader(
             pNumClassInstances);
 
         WrapObject(IID_ID3D11ComputeShader, reinterpret_cast<void**>(ppComputeShader), nullptr);
-        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), * pNumClassInstances, nullptr);
+        WrapObjectArray(IID_ID3D11ClassInstance, reinterpret_cast<void**>(ppClassInstances), (pNumClassInstances != nullptr) ? *pNumClassInstances : 0, nullptr);
 
         Encode_ID3D11DeviceContext_CSGetShader(
             this,
