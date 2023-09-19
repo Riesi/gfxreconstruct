@@ -10010,18 +10010,20 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_GetData(
     UINT                                        DataSize,
     UINT                                        GetDataFlags)
 {
-    auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
-    if (replay_object != nullptr)
+    auto replay_object = GetObjectInfo(object_id);
+    if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        auto in_pAsync = MapObject<ID3D11Asynchronous>(pAsync);
+        auto in_pAsync = GetObjectInfo(pAsync);
         if(!pData->IsNull())
         {
             pData->AllocateOutputData(DataSize);
         }
-        auto replay_result = replay_object->GetData(in_pAsync,
-                                                    pData->GetOutputPointer(),
-                                                    DataSize,
-                                                    GetDataFlags);
+        auto replay_result = OverrideDeviceContextGetData(replay_object,
+                                                          return_value,
+                                                          in_pAsync,
+                                                          pData,
+                                                          DataSize,
+                                                          GetDataFlags);
         CheckReplayResult("ID3D11DeviceContext_GetData", return_value, replay_result);
     }
 }
