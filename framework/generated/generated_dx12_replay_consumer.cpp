@@ -75,9 +75,12 @@ void Dx12ReplayConsumer::Process_CreateDXGIFactory2(
     Decoded_GUID                                riid,
     HandlePointerDecoder<void*>*                ppFactory)
 {
-    if(!ppFactory->IsNull()) ppFactory->SetHandleLength(1);
     DxObjectInfo object_info{};
-    ppFactory->SetConsumerData(0, &object_info);
+    if(!ppFactory->IsNull())
+    {
+        ppFactory->SetHandleLength(1);
+        ppFactory->SetConsumerData(0, &object_info);
+    }
     auto replay_result = OverrideCreateDXGIFactory2(return_value,
                                                     Flags,
                                                     riid,
@@ -220,9 +223,12 @@ void Dx12ReplayConsumer::Process_D3D12CreateDevice(
     HandlePointerDecoder<void*>*                ppDevice)
 {
     auto in_pAdapter = GetObjectInfo(pAdapter);
-    if(!ppDevice->IsNull()) ppDevice->SetHandleLength(1);
     DxObjectInfo object_info{};
-    ppDevice->SetConsumerData(0, &object_info);
+    if(!ppDevice->IsNull())
+    {
+        ppDevice->SetHandleLength(1);
+        ppDevice->SetConsumerData(0, &object_info);
+    }
     auto replay_result = OverrideD3D12CreateDevice(return_value,
                                                    in_pAdapter,
                                                    MinimumFeatureLevel,
@@ -975,9 +981,12 @@ void Dx12ReplayConsumer::Process_IDXGISwapChain_GetBuffer(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppSurface->IsNull()) ppSurface->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppSurface->SetConsumerData(0, &object_info);
+        if(!ppSurface->IsNull())
+        {
+            ppSurface->SetHandleLength(1);
+            ppSurface->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideGetBuffer(replay_object,
                                                return_value,
                                                Buffer,
@@ -1223,9 +1232,12 @@ void Dx12ReplayConsumer::Process_IDXGIFactory_CreateSwapChain(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pDevice = GetObjectInfo(pDevice);
-        if(!ppSwapChain->IsNull()) ppSwapChain->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppSwapChain->SetConsumerData(0, &object_info);
+        if(!ppSwapChain->IsNull())
+        {
+            ppSwapChain->SetHandleLength(1);
+            ppSwapChain->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateSwapChain(replay_object,
                                                      return_value,
                                                      in_pDevice,
@@ -1297,7 +1309,7 @@ void Dx12ReplayConsumer::Process_IDXGIDevice_CreateSurface(
     auto replay_object = MapObject<IDXGIDevice>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSurface->IsNull()) ppSurface->SetHandleLength(1);
+        if(!ppSurface->IsNull()) ppSurface->SetHandleLength(NumSurfaces);
         auto out_p_ppSurface    = ppSurface->GetPointer();
         auto out_hp_ppSurface   = ppSurface->GetHandlePointer();
         auto replay_result = replay_object->CreateSurface(pDesc->GetPointer(),
@@ -1307,7 +1319,7 @@ void Dx12ReplayConsumer::Process_IDXGIDevice_CreateSurface(
                                                           out_hp_ppSurface);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(out_p_ppSurface, out_hp_ppSurface, format::ApiCall_IDXGIDevice_CreateSurface);
+            AddObjects(out_p_ppSurface, ppSurface->GetLength(), out_hp_ppSurface, NumSurfaces, format::ApiCall_IDXGIDevice_CreateSurface);
         }
         CheckReplayResult("IDXGIDevice_CreateSurface", return_value, replay_result);
     }
@@ -2011,9 +2023,12 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForHwnd(
     {
         auto in_pDevice = GetObjectInfo(pDevice);
         auto in_pRestrictToOutput = GetObjectInfo(pRestrictToOutput);
-        if(!ppSwapChain->IsNull()) ppSwapChain->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppSwapChain->SetConsumerData(0, &object_info);
+        if(!ppSwapChain->IsNull())
+        {
+            ppSwapChain->SetHandleLength(1);
+            ppSwapChain->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateSwapChainForHwnd(replay_object,
                                                             return_value,
                                                             in_pDevice,
@@ -2046,9 +2061,12 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForCoreWindow(
         auto in_pDevice = GetObjectInfo(pDevice);
         auto in_pWindow = GetObjectInfo(pWindow);
         auto in_pRestrictToOutput = GetObjectInfo(pRestrictToOutput);
-        if(!ppSwapChain->IsNull()) ppSwapChain->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppSwapChain->SetConsumerData(0, &object_info);
+        if(!ppSwapChain->IsNull())
+        {
+            ppSwapChain->SetHandleLength(1);
+            ppSwapChain->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateSwapChainForCoreWindow(replay_object,
                                                                   return_value,
                                                                   in_pDevice,
@@ -2211,9 +2229,12 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForComposition(
     {
         auto in_pDevice = GetObjectInfo(pDevice);
         auto in_pRestrictToOutput = GetObjectInfo(pRestrictToOutput);
-        if(!ppSwapChain->IsNull()) ppSwapChain->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppSwapChain->SetConsumerData(0, &object_info);
+        if(!ppSwapChain->IsNull())
+        {
+            ppSwapChain->SetHandleLength(1);
+            ppSwapChain->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateSwapChainForComposition(replay_object,
                                                                    return_value,
                                                                    in_pDevice,
@@ -4897,9 +4918,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandQueue(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppCommandQueue->IsNull()) ppCommandQueue->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppCommandQueue->SetConsumerData(0, &object_info);
+        if(!ppCommandQueue->IsNull())
+        {
+            ppCommandQueue->SetHandleLength(1);
+            ppCommandQueue->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommandQueue(replay_object,
                                                         return_value,
                                                         pDesc,
@@ -4950,9 +4974,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateGraphicsPipelineState(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        if(!ppPipelineState->IsNull()) ppPipelineState->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppPipelineState->SetConsumerData(0, &object_info);
+        if(!ppPipelineState->IsNull())
+        {
+            ppPipelineState->SetHandleLength(1);
+            ppPipelineState->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateGraphicsPipelineState(replay_object,
                                                                  return_value,
                                                                  pDesc,
@@ -4978,9 +5005,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateComputePipelineState(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        if(!ppPipelineState->IsNull()) ppPipelineState->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppPipelineState->SetConsumerData(0, &object_info);
+        if(!ppPipelineState->IsNull())
+        {
+            ppPipelineState->SetHandleLength(1);
+            ppPipelineState->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateComputePipelineState(replay_object,
                                                                 return_value,
                                                                 pDesc,
@@ -5010,9 +5040,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandList(
     {
         auto in_pCommandAllocator = GetObjectInfo(pCommandAllocator);
         auto in_pInitialState = GetObjectInfo(pInitialState);
-        if(!ppCommandList->IsNull()) ppCommandList->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppCommandList->SetConsumerData(0, &object_info);
+        if(!ppCommandList->IsNull())
+        {
+            ppCommandList->SetHandleLength(1);
+            ppCommandList->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommandList(replay_object,
                                                        return_value,
                                                        nodeMask,
@@ -5040,9 +5073,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateDescriptorHeap(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppvHeap->IsNull()) ppvHeap->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvHeap->SetConsumerData(0, &object_info);
+        if(!ppvHeap->IsNull())
+        {
+            ppvHeap->SetHandleLength(1);
+            ppvHeap->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateDescriptorHeap(replay_object,
                                                           return_value,
                                                           pDescriptorHeapDesc,
@@ -5084,9 +5120,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateRootSignature(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppvRootSignature->IsNull()) ppvRootSignature->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvRootSignature->SetConsumerData(0, &object_info);
+        if(!ppvRootSignature->IsNull())
+        {
+            ppvRootSignature->SetHandleLength(1);
+            ppvRootSignature->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateRootSignature(replay_object,
                                                          return_value,
                                                          nodeMask,
@@ -5302,9 +5341,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommittedResource(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppvResource->IsNull()) ppvResource->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvResource->SetConsumerData(0, &object_info);
+        if(!ppvResource->IsNull())
+        {
+            ppvResource->SetHandleLength(1);
+            ppvResource->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommittedResource(replay_object,
                                                              return_value,
                                                              pHeapProperties,
@@ -5334,9 +5376,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateHeap(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppvHeap->IsNull()) ppvHeap->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvHeap->SetConsumerData(0, &object_info);
+        if(!ppvHeap->IsNull())
+        {
+            ppvHeap->SetHandleLength(1);
+            ppvHeap->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateHeap(replay_object,
                                                 return_value,
                                                 pDesc,
@@ -5398,9 +5443,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateReservedResource(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppvResource->IsNull()) ppvResource->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvResource->SetConsumerData(0, &object_info);
+        if(!ppvResource->IsNull())
+        {
+            ppvResource->SetHandleLength(1);
+            ppvResource->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateReservedResource(replay_object,
                                                             return_value,
                                                             pDesc,
@@ -5544,9 +5592,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateFence(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppFence->IsNull()) ppFence->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppFence->SetConsumerData(0, &object_info);
+        if(!ppFence->IsNull())
+        {
+            ppFence->SetHandleLength(1);
+            ppFence->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateFence(replay_object,
                                                  return_value,
                                                  InitialValue,
@@ -5668,9 +5719,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandSignature(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pRootSignature = GetObjectInfo(pRootSignature);
-        if(!ppvCommandSignature->IsNull()) ppvCommandSignature->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvCommandSignature->SetConsumerData(0, &object_info);
+        if(!ppvCommandSignature->IsNull())
+        {
+            ppvCommandSignature->SetHandleLength(1);
+            ppvCommandSignature->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommandSignature(replay_object,
                                                             return_value,
                                                             pDesc,
@@ -5772,9 +5826,12 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary_LoadGraphicsPipeline(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        if(!ppPipelineState->IsNull()) ppPipelineState->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppPipelineState->SetConsumerData(0, &object_info);
+        if(!ppPipelineState->IsNull())
+        {
+            ppPipelineState->SetHandleLength(1);
+            ppPipelineState->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideLoadGraphicsPipeline(replay_object,
                                                           return_value,
                                                           pName,
@@ -5802,9 +5859,12 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary_LoadComputePipeline(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        if(!ppPipelineState->IsNull()) ppPipelineState->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppPipelineState->SetConsumerData(0, &object_info);
+        if(!ppPipelineState->IsNull())
+        {
+            ppPipelineState->SetHandleLength(1);
+            ppPipelineState->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideLoadComputePipeline(replay_object,
                                                          return_value,
                                                          pName,
@@ -5864,9 +5924,12 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary1_LoadPipeline(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        if(!ppPipelineState->IsNull()) ppPipelineState->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppPipelineState->SetConsumerData(0, &object_info);
+        if(!ppPipelineState->IsNull())
+        {
+            ppPipelineState->SetHandleLength(1);
+            ppPipelineState->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideLoadPipeline(replay_object,
                                                   return_value,
                                                   pName,
@@ -5893,9 +5956,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device1_CreatePipelineLibrary(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppPipelineLibrary->IsNull()) ppPipelineLibrary->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppPipelineLibrary->SetConsumerData(0, &object_info);
+        if(!ppPipelineLibrary->IsNull())
+        {
+            ppPipelineLibrary->SetHandleLength(1);
+            ppPipelineLibrary->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreatePipelineLibrary(replay_object,
                                                            return_value,
                                                            pLibraryBlob,
@@ -5990,9 +6056,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device3_OpenExistingHeapFromAddress(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppvHeap->IsNull()) ppvHeap->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvHeap->SetConsumerData(0, &object_info);
+        if(!ppvHeap->IsNull())
+        {
+            ppvHeap->SetHandleLength(1);
+            ppvHeap->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideOpenExistingHeapFromAddress(replay_object,
                                                                  return_value,
                                                                  pAddress,
@@ -6118,9 +6187,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateCommandList1(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppCommandList->IsNull()) ppCommandList->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppCommandList->SetConsumerData(0, &object_info);
+        if(!ppCommandList->IsNull())
+        {
+            ppCommandList->SetHandleLength(1);
+            ppCommandList->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommandList1(replay_object,
                                                         return_value,
                                                         nodeMask,
@@ -6178,9 +6250,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateCommittedResource1(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        if(!ppvResource->IsNull()) ppvResource->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvResource->SetConsumerData(0, &object_info);
+        if(!ppvResource->IsNull())
+        {
+            ppvResource->SetHandleLength(1);
+            ppvResource->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommittedResource1(replay_object,
                                                               return_value,
                                                               pHeapProperties,
@@ -6213,9 +6288,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateHeap1(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        if(!ppvHeap->IsNull()) ppvHeap->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvHeap->SetConsumerData(0, &object_info);
+        if(!ppvHeap->IsNull())
+        {
+            ppvHeap->SetHandleLength(1);
+            ppvHeap->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateHeap1(replay_object,
                                                  return_value,
                                                  pDesc,
@@ -6245,9 +6323,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateReservedResource1(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        if(!ppvResource->IsNull()) ppvResource->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvResource->SetConsumerData(0, &object_info);
+        if(!ppvResource->IsNull())
+        {
+            ppvResource->SetHandleLength(1);
+            ppvResource->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateReservedResource1(replay_object,
                                                              return_value,
                                                              pDesc,
@@ -6586,9 +6667,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device5_CreateStateObject(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        if(!ppStateObject->IsNull()) ppStateObject->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppStateObject->SetConsumerData(0, &object_info);
+        if(!ppStateObject->IsNull())
+        {
+            ppStateObject->SetHandleLength(1);
+            ppStateObject->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateStateObject(replay_object,
                                                        return_value,
                                                        pDesc,
@@ -6860,9 +6944,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device7_AddToStateObject(
     {
         MapStructObjects(pAddition->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
         auto in_pStateObjectToGrowFrom = GetObjectInfo(pStateObjectToGrowFrom);
-        if(!ppNewStateObject->IsNull()) ppNewStateObject->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppNewStateObject->SetConsumerData(0, &object_info);
+        if(!ppNewStateObject->IsNull())
+        {
+            ppNewStateObject->SetHandleLength(1);
+            ppNewStateObject->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideAddToStateObject(replay_object,
                                                       return_value,
                                                       pAddition,
@@ -6942,9 +7029,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device8_CreateCommittedResource2(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        if(!ppvResource->IsNull()) ppvResource->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppvResource->SetConsumerData(0, &object_info);
+        if(!ppvResource->IsNull())
+        {
+            ppvResource->SetHandleLength(1);
+            ppvResource->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommittedResource2(replay_object,
                                                               return_value,
                                                               pHeapProperties,
@@ -7422,9 +7512,12 @@ void Dx12ReplayConsumer::Process_ID3D12Device9_CreateCommandQueue1(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        if(!ppCommandQueue->IsNull()) ppCommandQueue->SetHandleLength(1);
         DxObjectInfo object_info{};
-        ppCommandQueue->SetConsumerData(0, &object_info);
+        if(!ppCommandQueue->IsNull())
+        {
+            ppCommandQueue->SetHandleLength(1);
+            ppCommandQueue->SetConsumerData(0, &object_info);
+        }
         auto replay_result = OverrideCreateCommandQueue1(replay_object,
                                                          return_value,
                                                          pDesc,
@@ -10738,13 +10831,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_VSGetConstantBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         replay_object->VSGetConstantBuffers(StartSlot,
                                             NumBuffers,
                                             out_hp_ppConstantBuffers);
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext_VSGetConstantBuffers);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_VSGetConstantBuffers);
     }
 }
 
@@ -10758,13 +10851,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_PSGetShaderResources(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(1);
+        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(NumViews);
         auto out_p_ppShaderResourceViews    = ppShaderResourceViews->GetPointer();
         auto out_hp_ppShaderResourceViews   = ppShaderResourceViews->GetHandlePointer();
         replay_object->PSGetShaderResources(StartSlot,
                                             NumViews,
                                             out_hp_ppShaderResourceViews);
-        AddObject(out_p_ppShaderResourceViews, out_hp_ppShaderResourceViews, format::ApiCall_ID3D11DeviceContext_PSGetShaderResources);
+        AddObjects(out_p_ppShaderResourceViews, ppShaderResourceViews->GetLength(), out_hp_ppShaderResourceViews, NumViews, format::ApiCall_ID3D11DeviceContext_PSGetShaderResources);
     }
 }
 
@@ -10781,19 +10874,22 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_PSGetShader(
         if(!ppPixelShader->IsNull()) ppPixelShader->SetHandleLength(1);
         auto out_p_ppPixelShader    = ppPixelShader->GetPointer();
         auto out_hp_ppPixelShader   = ppPixelShader->GetHandlePointer();
-        if(!ppClassInstances->IsNull()) ppClassInstances->SetHandleLength(1);
-        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
-        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         if(!pNumClassInstances->IsNull())
         {
             pNumClassInstances->AllocateOutputData(1, GetOutputArrayCount("ID3D11DeviceContext::PSGetShader", S_OK, object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayPSGetShader, pNumClassInstances, ppClassInstances));
         }
+        if(!ppClassInstances->IsNull() && !pNumClassInstances->IsNull())
+        {
+            ppClassInstances->SetHandleLength(*pNumClassInstances->GetOutputPointer());
+        }
+        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
+        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         replay_object->PSGetShader(out_hp_ppPixelShader,
                                    out_hp_ppClassInstances,
                                    pNumClassInstances->GetOutputPointer());
         if (ppClassInstances->IsNull() && !pNumClassInstances->IsNull()) { SetOutputArrayCount(object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayPSGetShader, *pNumClassInstances->GetOutputPointer()); }
         AddObject(out_p_ppPixelShader, out_hp_ppPixelShader, format::ApiCall_ID3D11DeviceContext_PSGetShader);
-        AddObject(out_p_ppClassInstances, out_hp_ppClassInstances, format::ApiCall_ID3D11DeviceContext_PSGetShader);
+        AddObjects(out_p_ppClassInstances, ppClassInstances->GetLength(), out_hp_ppClassInstances, !pNumClassInstances->IsNull() ? *pNumClassInstances->GetOutputPointer() : 0, format::ApiCall_ID3D11DeviceContext_PSGetShader);
     }
 }
 
@@ -10807,13 +10903,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_PSGetSamplers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(1);
+        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(NumSamplers);
         auto out_p_ppSamplers    = ppSamplers->GetPointer();
         auto out_hp_ppSamplers   = ppSamplers->GetHandlePointer();
         replay_object->PSGetSamplers(StartSlot,
                                      NumSamplers,
                                      out_hp_ppSamplers);
-        AddObject(out_p_ppSamplers, out_hp_ppSamplers, format::ApiCall_ID3D11DeviceContext_PSGetSamplers);
+        AddObjects(out_p_ppSamplers, ppSamplers->GetLength(), out_hp_ppSamplers, NumSamplers, format::ApiCall_ID3D11DeviceContext_PSGetSamplers);
     }
 }
 
@@ -10830,19 +10926,22 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_VSGetShader(
         if(!ppVertexShader->IsNull()) ppVertexShader->SetHandleLength(1);
         auto out_p_ppVertexShader    = ppVertexShader->GetPointer();
         auto out_hp_ppVertexShader   = ppVertexShader->GetHandlePointer();
-        if(!ppClassInstances->IsNull()) ppClassInstances->SetHandleLength(1);
-        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
-        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         if(!pNumClassInstances->IsNull())
         {
             pNumClassInstances->AllocateOutputData(1, GetOutputArrayCount("ID3D11DeviceContext::VSGetShader", S_OK, object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayVSGetShader, pNumClassInstances, ppClassInstances));
         }
+        if(!ppClassInstances->IsNull() && !pNumClassInstances->IsNull())
+        {
+            ppClassInstances->SetHandleLength(*pNumClassInstances->GetOutputPointer());
+        }
+        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
+        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         replay_object->VSGetShader(out_hp_ppVertexShader,
                                    out_hp_ppClassInstances,
                                    pNumClassInstances->GetOutputPointer());
         if (ppClassInstances->IsNull() && !pNumClassInstances->IsNull()) { SetOutputArrayCount(object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayVSGetShader, *pNumClassInstances->GetOutputPointer()); }
         AddObject(out_p_ppVertexShader, out_hp_ppVertexShader, format::ApiCall_ID3D11DeviceContext_VSGetShader);
-        AddObject(out_p_ppClassInstances, out_hp_ppClassInstances, format::ApiCall_ID3D11DeviceContext_VSGetShader);
+        AddObjects(out_p_ppClassInstances, ppClassInstances->GetLength(), out_hp_ppClassInstances, !pNumClassInstances->IsNull() ? *pNumClassInstances->GetOutputPointer() : 0, format::ApiCall_ID3D11DeviceContext_VSGetShader);
     }
 }
 
@@ -10856,13 +10955,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_PSGetConstantBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         replay_object->PSGetConstantBuffers(StartSlot,
                                             NumBuffers,
                                             out_hp_ppConstantBuffers);
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext_PSGetConstantBuffers);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_PSGetConstantBuffers);
     }
 }
 
@@ -10894,7 +10993,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_IAGetVertexBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppVertexBuffers->IsNull()) ppVertexBuffers->SetHandleLength(1);
+        if(!ppVertexBuffers->IsNull()) ppVertexBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppVertexBuffers    = ppVertexBuffers->GetPointer();
         auto out_hp_ppVertexBuffers   = ppVertexBuffers->GetHandlePointer();
         if(!pStrides->IsNull())
@@ -10910,7 +11009,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_IAGetVertexBuffers(
                                           out_hp_ppVertexBuffers,
                                           pStrides->GetOutputPointer(),
                                           pOffsets->GetOutputPointer());
-        AddObject(out_p_ppVertexBuffers, out_hp_ppVertexBuffers, format::ApiCall_ID3D11DeviceContext_IAGetVertexBuffers);
+        AddObjects(out_p_ppVertexBuffers, ppVertexBuffers->GetLength(), out_hp_ppVertexBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_IAGetVertexBuffers);
     }
 }
 
@@ -10952,13 +11051,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_GSGetConstantBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         replay_object->GSGetConstantBuffers(StartSlot,
                                             NumBuffers,
                                             out_hp_ppConstantBuffers);
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext_GSGetConstantBuffers);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_GSGetConstantBuffers);
     }
 }
 
@@ -10975,19 +11074,22 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_GSGetShader(
         if(!ppGeometryShader->IsNull()) ppGeometryShader->SetHandleLength(1);
         auto out_p_ppGeometryShader    = ppGeometryShader->GetPointer();
         auto out_hp_ppGeometryShader   = ppGeometryShader->GetHandlePointer();
-        if(!ppClassInstances->IsNull()) ppClassInstances->SetHandleLength(1);
-        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
-        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         if(!pNumClassInstances->IsNull())
         {
             pNumClassInstances->AllocateOutputData(1, GetOutputArrayCount("ID3D11DeviceContext::GSGetShader", S_OK, object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayGSGetShader, pNumClassInstances, ppClassInstances));
         }
+        if(!ppClassInstances->IsNull() && !pNumClassInstances->IsNull())
+        {
+            ppClassInstances->SetHandleLength(*pNumClassInstances->GetOutputPointer());
+        }
+        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
+        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         replay_object->GSGetShader(out_hp_ppGeometryShader,
                                    out_hp_ppClassInstances,
                                    pNumClassInstances->GetOutputPointer());
         if (ppClassInstances->IsNull() && !pNumClassInstances->IsNull()) { SetOutputArrayCount(object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayGSGetShader, *pNumClassInstances->GetOutputPointer()); }
         AddObject(out_p_ppGeometryShader, out_hp_ppGeometryShader, format::ApiCall_ID3D11DeviceContext_GSGetShader);
-        AddObject(out_p_ppClassInstances, out_hp_ppClassInstances, format::ApiCall_ID3D11DeviceContext_GSGetShader);
+        AddObjects(out_p_ppClassInstances, ppClassInstances->GetLength(), out_hp_ppClassInstances, !pNumClassInstances->IsNull() ? *pNumClassInstances->GetOutputPointer() : 0, format::ApiCall_ID3D11DeviceContext_GSGetShader);
     }
 }
 
@@ -11017,13 +11119,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_VSGetShaderResources(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(1);
+        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(NumViews);
         auto out_p_ppShaderResourceViews    = ppShaderResourceViews->GetPointer();
         auto out_hp_ppShaderResourceViews   = ppShaderResourceViews->GetHandlePointer();
         replay_object->VSGetShaderResources(StartSlot,
                                             NumViews,
                                             out_hp_ppShaderResourceViews);
-        AddObject(out_p_ppShaderResourceViews, out_hp_ppShaderResourceViews, format::ApiCall_ID3D11DeviceContext_VSGetShaderResources);
+        AddObjects(out_p_ppShaderResourceViews, ppShaderResourceViews->GetLength(), out_hp_ppShaderResourceViews, NumViews, format::ApiCall_ID3D11DeviceContext_VSGetShaderResources);
     }
 }
 
@@ -11037,13 +11139,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_VSGetSamplers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(1);
+        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(NumSamplers);
         auto out_p_ppSamplers    = ppSamplers->GetPointer();
         auto out_hp_ppSamplers   = ppSamplers->GetHandlePointer();
         replay_object->VSGetSamplers(StartSlot,
                                      NumSamplers,
                                      out_hp_ppSamplers);
-        AddObject(out_p_ppSamplers, out_hp_ppSamplers, format::ApiCall_ID3D11DeviceContext_VSGetSamplers);
+        AddObjects(out_p_ppSamplers, ppSamplers->GetLength(), out_hp_ppSamplers, NumSamplers, format::ApiCall_ID3D11DeviceContext_VSGetSamplers);
     }
 }
 
@@ -11079,13 +11181,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_GSGetShaderResources(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(1);
+        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(NumViews);
         auto out_p_ppShaderResourceViews    = ppShaderResourceViews->GetPointer();
         auto out_hp_ppShaderResourceViews   = ppShaderResourceViews->GetHandlePointer();
         replay_object->GSGetShaderResources(StartSlot,
                                             NumViews,
                                             out_hp_ppShaderResourceViews);
-        AddObject(out_p_ppShaderResourceViews, out_hp_ppShaderResourceViews, format::ApiCall_ID3D11DeviceContext_GSGetShaderResources);
+        AddObjects(out_p_ppShaderResourceViews, ppShaderResourceViews->GetLength(), out_hp_ppShaderResourceViews, NumViews, format::ApiCall_ID3D11DeviceContext_GSGetShaderResources);
     }
 }
 
@@ -11099,13 +11201,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_GSGetSamplers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(1);
+        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(NumSamplers);
         auto out_p_ppSamplers    = ppSamplers->GetPointer();
         auto out_hp_ppSamplers   = ppSamplers->GetHandlePointer();
         replay_object->GSGetSamplers(StartSlot,
                                      NumSamplers,
                                      out_hp_ppSamplers);
-        AddObject(out_p_ppSamplers, out_hp_ppSamplers, format::ApiCall_ID3D11DeviceContext_GSGetSamplers);
+        AddObjects(out_p_ppSamplers, ppSamplers->GetLength(), out_hp_ppSamplers, NumSamplers, format::ApiCall_ID3D11DeviceContext_GSGetSamplers);
     }
 }
 
@@ -11119,7 +11221,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_OMGetRenderTargets(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppRenderTargetViews->IsNull()) ppRenderTargetViews->SetHandleLength(1);
+        if(!ppRenderTargetViews->IsNull()) ppRenderTargetViews->SetHandleLength(NumViews);
         auto out_p_ppRenderTargetViews    = ppRenderTargetViews->GetPointer();
         auto out_hp_ppRenderTargetViews   = ppRenderTargetViews->GetHandlePointer();
         if(!ppDepthStencilView->IsNull()) ppDepthStencilView->SetHandleLength(1);
@@ -11128,7 +11230,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_OMGetRenderTargets(
         replay_object->OMGetRenderTargets(NumViews,
                                           out_hp_ppRenderTargetViews,
                                           out_hp_ppDepthStencilView);
-        AddObject(out_p_ppRenderTargetViews, out_hp_ppRenderTargetViews, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargets);
+        AddObjects(out_p_ppRenderTargetViews, ppRenderTargetViews->GetLength(), out_hp_ppRenderTargetViews, NumViews, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargets);
         AddObject(out_p_ppDepthStencilView, out_hp_ppDepthStencilView, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargets);
     }
 }
@@ -11146,13 +11248,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_OMGetRenderTargetsAndUnorde
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppRenderTargetViews->IsNull()) ppRenderTargetViews->SetHandleLength(1);
+        if(!ppRenderTargetViews->IsNull()) ppRenderTargetViews->SetHandleLength(NumRTVs);
         auto out_p_ppRenderTargetViews    = ppRenderTargetViews->GetPointer();
         auto out_hp_ppRenderTargetViews   = ppRenderTargetViews->GetHandlePointer();
         if(!ppDepthStencilView->IsNull()) ppDepthStencilView->SetHandleLength(1);
         auto out_p_ppDepthStencilView    = ppDepthStencilView->GetPointer();
         auto out_hp_ppDepthStencilView   = ppDepthStencilView->GetHandlePointer();
-        if(!ppUnorderedAccessViews->IsNull()) ppUnorderedAccessViews->SetHandleLength(1);
+        if(!ppUnorderedAccessViews->IsNull()) ppUnorderedAccessViews->SetHandleLength(NumUAVs);
         auto out_p_ppUnorderedAccessViews    = ppUnorderedAccessViews->GetPointer();
         auto out_hp_ppUnorderedAccessViews   = ppUnorderedAccessViews->GetHandlePointer();
         replay_object->OMGetRenderTargetsAndUnorderedAccessViews(NumRTVs,
@@ -11161,9 +11263,9 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_OMGetRenderTargetsAndUnorde
                                                                  UAVStartSlot,
                                                                  NumUAVs,
                                                                  out_hp_ppUnorderedAccessViews);
-        AddObject(out_p_ppRenderTargetViews, out_hp_ppRenderTargetViews, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargetsAndUnorderedAccessViews);
+        AddObjects(out_p_ppRenderTargetViews, ppRenderTargetViews->GetLength(), out_hp_ppRenderTargetViews, NumRTVs, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargetsAndUnorderedAccessViews);
         AddObject(out_p_ppDepthStencilView, out_hp_ppDepthStencilView, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargetsAndUnorderedAccessViews);
-        AddObject(out_p_ppUnorderedAccessViews, out_hp_ppUnorderedAccessViews, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargetsAndUnorderedAccessViews);
+        AddObjects(out_p_ppUnorderedAccessViews, ppUnorderedAccessViews->GetLength(), out_hp_ppUnorderedAccessViews, NumUAVs, format::ApiCall_ID3D11DeviceContext_OMGetRenderTargetsAndUnorderedAccessViews);
     }
 }
 
@@ -11226,12 +11328,12 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_SOGetTargets(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSOTargets->IsNull()) ppSOTargets->SetHandleLength(1);
+        if(!ppSOTargets->IsNull()) ppSOTargets->SetHandleLength(NumBuffers);
         auto out_p_ppSOTargets    = ppSOTargets->GetPointer();
         auto out_hp_ppSOTargets   = ppSOTargets->GetHandlePointer();
         replay_object->SOGetTargets(NumBuffers,
                                     out_hp_ppSOTargets);
-        AddObject(out_p_ppSOTargets, out_hp_ppSOTargets, format::ApiCall_ID3D11DeviceContext_SOGetTargets);
+        AddObjects(out_p_ppSOTargets, ppSOTargets->GetLength(), out_hp_ppSOTargets, NumBuffers, format::ApiCall_ID3D11DeviceContext_SOGetTargets);
     }
 }
 
@@ -11307,13 +11409,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_HSGetShaderResources(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(1);
+        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(NumViews);
         auto out_p_ppShaderResourceViews    = ppShaderResourceViews->GetPointer();
         auto out_hp_ppShaderResourceViews   = ppShaderResourceViews->GetHandlePointer();
         replay_object->HSGetShaderResources(StartSlot,
                                             NumViews,
                                             out_hp_ppShaderResourceViews);
-        AddObject(out_p_ppShaderResourceViews, out_hp_ppShaderResourceViews, format::ApiCall_ID3D11DeviceContext_HSGetShaderResources);
+        AddObjects(out_p_ppShaderResourceViews, ppShaderResourceViews->GetLength(), out_hp_ppShaderResourceViews, NumViews, format::ApiCall_ID3D11DeviceContext_HSGetShaderResources);
     }
 }
 
@@ -11330,19 +11432,22 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_HSGetShader(
         if(!ppHullShader->IsNull()) ppHullShader->SetHandleLength(1);
         auto out_p_ppHullShader    = ppHullShader->GetPointer();
         auto out_hp_ppHullShader   = ppHullShader->GetHandlePointer();
-        if(!ppClassInstances->IsNull()) ppClassInstances->SetHandleLength(1);
-        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
-        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         if(!pNumClassInstances->IsNull())
         {
             pNumClassInstances->AllocateOutputData(1, GetOutputArrayCount("ID3D11DeviceContext::HSGetShader", S_OK, object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayHSGetShader, pNumClassInstances, ppClassInstances));
         }
+        if(!ppClassInstances->IsNull() && !pNumClassInstances->IsNull())
+        {
+            ppClassInstances->SetHandleLength(*pNumClassInstances->GetOutputPointer());
+        }
+        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
+        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         replay_object->HSGetShader(out_hp_ppHullShader,
                                    out_hp_ppClassInstances,
                                    pNumClassInstances->GetOutputPointer());
         if (ppClassInstances->IsNull() && !pNumClassInstances->IsNull()) { SetOutputArrayCount(object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayHSGetShader, *pNumClassInstances->GetOutputPointer()); }
         AddObject(out_p_ppHullShader, out_hp_ppHullShader, format::ApiCall_ID3D11DeviceContext_HSGetShader);
-        AddObject(out_p_ppClassInstances, out_hp_ppClassInstances, format::ApiCall_ID3D11DeviceContext_HSGetShader);
+        AddObjects(out_p_ppClassInstances, ppClassInstances->GetLength(), out_hp_ppClassInstances, !pNumClassInstances->IsNull() ? *pNumClassInstances->GetOutputPointer() : 0, format::ApiCall_ID3D11DeviceContext_HSGetShader);
     }
 }
 
@@ -11356,13 +11461,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_HSGetSamplers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(1);
+        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(NumSamplers);
         auto out_p_ppSamplers    = ppSamplers->GetPointer();
         auto out_hp_ppSamplers   = ppSamplers->GetHandlePointer();
         replay_object->HSGetSamplers(StartSlot,
                                      NumSamplers,
                                      out_hp_ppSamplers);
-        AddObject(out_p_ppSamplers, out_hp_ppSamplers, format::ApiCall_ID3D11DeviceContext_HSGetSamplers);
+        AddObjects(out_p_ppSamplers, ppSamplers->GetLength(), out_hp_ppSamplers, NumSamplers, format::ApiCall_ID3D11DeviceContext_HSGetSamplers);
     }
 }
 
@@ -11376,13 +11481,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_HSGetConstantBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         replay_object->HSGetConstantBuffers(StartSlot,
                                             NumBuffers,
                                             out_hp_ppConstantBuffers);
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext_HSGetConstantBuffers);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_HSGetConstantBuffers);
     }
 }
 
@@ -11396,13 +11501,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_DSGetShaderResources(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(1);
+        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(NumViews);
         auto out_p_ppShaderResourceViews    = ppShaderResourceViews->GetPointer();
         auto out_hp_ppShaderResourceViews   = ppShaderResourceViews->GetHandlePointer();
         replay_object->DSGetShaderResources(StartSlot,
                                             NumViews,
                                             out_hp_ppShaderResourceViews);
-        AddObject(out_p_ppShaderResourceViews, out_hp_ppShaderResourceViews, format::ApiCall_ID3D11DeviceContext_DSGetShaderResources);
+        AddObjects(out_p_ppShaderResourceViews, ppShaderResourceViews->GetLength(), out_hp_ppShaderResourceViews, NumViews, format::ApiCall_ID3D11DeviceContext_DSGetShaderResources);
     }
 }
 
@@ -11419,19 +11524,22 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_DSGetShader(
         if(!ppDomainShader->IsNull()) ppDomainShader->SetHandleLength(1);
         auto out_p_ppDomainShader    = ppDomainShader->GetPointer();
         auto out_hp_ppDomainShader   = ppDomainShader->GetHandlePointer();
-        if(!ppClassInstances->IsNull()) ppClassInstances->SetHandleLength(1);
-        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
-        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         if(!pNumClassInstances->IsNull())
         {
             pNumClassInstances->AllocateOutputData(1, GetOutputArrayCount("ID3D11DeviceContext::DSGetShader", S_OK, object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayDSGetShader, pNumClassInstances, ppClassInstances));
         }
+        if(!ppClassInstances->IsNull() && !pNumClassInstances->IsNull())
+        {
+            ppClassInstances->SetHandleLength(*pNumClassInstances->GetOutputPointer());
+        }
+        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
+        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         replay_object->DSGetShader(out_hp_ppDomainShader,
                                    out_hp_ppClassInstances,
                                    pNumClassInstances->GetOutputPointer());
         if (ppClassInstances->IsNull() && !pNumClassInstances->IsNull()) { SetOutputArrayCount(object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayDSGetShader, *pNumClassInstances->GetOutputPointer()); }
         AddObject(out_p_ppDomainShader, out_hp_ppDomainShader, format::ApiCall_ID3D11DeviceContext_DSGetShader);
-        AddObject(out_p_ppClassInstances, out_hp_ppClassInstances, format::ApiCall_ID3D11DeviceContext_DSGetShader);
+        AddObjects(out_p_ppClassInstances, ppClassInstances->GetLength(), out_hp_ppClassInstances, !pNumClassInstances->IsNull() ? *pNumClassInstances->GetOutputPointer() : 0, format::ApiCall_ID3D11DeviceContext_DSGetShader);
     }
 }
 
@@ -11445,13 +11553,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_DSGetSamplers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(1);
+        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(NumSamplers);
         auto out_p_ppSamplers    = ppSamplers->GetPointer();
         auto out_hp_ppSamplers   = ppSamplers->GetHandlePointer();
         replay_object->DSGetSamplers(StartSlot,
                                      NumSamplers,
                                      out_hp_ppSamplers);
-        AddObject(out_p_ppSamplers, out_hp_ppSamplers, format::ApiCall_ID3D11DeviceContext_DSGetSamplers);
+        AddObjects(out_p_ppSamplers, ppSamplers->GetLength(), out_hp_ppSamplers, NumSamplers, format::ApiCall_ID3D11DeviceContext_DSGetSamplers);
     }
 }
 
@@ -11465,13 +11573,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_DSGetConstantBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         replay_object->DSGetConstantBuffers(StartSlot,
                                             NumBuffers,
                                             out_hp_ppConstantBuffers);
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext_DSGetConstantBuffers);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_DSGetConstantBuffers);
     }
 }
 
@@ -11485,13 +11593,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_CSGetShaderResources(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(1);
+        if(!ppShaderResourceViews->IsNull()) ppShaderResourceViews->SetHandleLength(NumViews);
         auto out_p_ppShaderResourceViews    = ppShaderResourceViews->GetPointer();
         auto out_hp_ppShaderResourceViews   = ppShaderResourceViews->GetHandlePointer();
         replay_object->CSGetShaderResources(StartSlot,
                                             NumViews,
                                             out_hp_ppShaderResourceViews);
-        AddObject(out_p_ppShaderResourceViews, out_hp_ppShaderResourceViews, format::ApiCall_ID3D11DeviceContext_CSGetShaderResources);
+        AddObjects(out_p_ppShaderResourceViews, ppShaderResourceViews->GetLength(), out_hp_ppShaderResourceViews, NumViews, format::ApiCall_ID3D11DeviceContext_CSGetShaderResources);
     }
 }
 
@@ -11505,13 +11613,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_CSGetUnorderedAccessViews(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppUnorderedAccessViews->IsNull()) ppUnorderedAccessViews->SetHandleLength(1);
+        if(!ppUnorderedAccessViews->IsNull()) ppUnorderedAccessViews->SetHandleLength(NumUAVs);
         auto out_p_ppUnorderedAccessViews    = ppUnorderedAccessViews->GetPointer();
         auto out_hp_ppUnorderedAccessViews   = ppUnorderedAccessViews->GetHandlePointer();
         replay_object->CSGetUnorderedAccessViews(StartSlot,
                                                  NumUAVs,
                                                  out_hp_ppUnorderedAccessViews);
-        AddObject(out_p_ppUnorderedAccessViews, out_hp_ppUnorderedAccessViews, format::ApiCall_ID3D11DeviceContext_CSGetUnorderedAccessViews);
+        AddObjects(out_p_ppUnorderedAccessViews, ppUnorderedAccessViews->GetLength(), out_hp_ppUnorderedAccessViews, NumUAVs, format::ApiCall_ID3D11DeviceContext_CSGetUnorderedAccessViews);
     }
 }
 
@@ -11528,19 +11636,22 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_CSGetShader(
         if(!ppComputeShader->IsNull()) ppComputeShader->SetHandleLength(1);
         auto out_p_ppComputeShader    = ppComputeShader->GetPointer();
         auto out_hp_ppComputeShader   = ppComputeShader->GetHandlePointer();
-        if(!ppClassInstances->IsNull()) ppClassInstances->SetHandleLength(1);
-        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
-        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         if(!pNumClassInstances->IsNull())
         {
             pNumClassInstances->AllocateOutputData(1, GetOutputArrayCount("ID3D11DeviceContext::CSGetShader", S_OK, object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayCSGetShader, pNumClassInstances, ppClassInstances));
         }
+        if(!ppClassInstances->IsNull() && !pNumClassInstances->IsNull())
+        {
+            ppClassInstances->SetHandleLength(*pNumClassInstances->GetOutputPointer());
+        }
+        auto out_p_ppClassInstances    = ppClassInstances->GetPointer();
+        auto out_hp_ppClassInstances   = ppClassInstances->GetHandlePointer();
         replay_object->CSGetShader(out_hp_ppComputeShader,
                                    out_hp_ppClassInstances,
                                    pNumClassInstances->GetOutputPointer());
         if (ppClassInstances->IsNull() && !pNumClassInstances->IsNull()) { SetOutputArrayCount(object_id, VariableLengthArrayIndices::kD3D11DeviceContextArrayCSGetShader, *pNumClassInstances->GetOutputPointer()); }
         AddObject(out_p_ppComputeShader, out_hp_ppComputeShader, format::ApiCall_ID3D11DeviceContext_CSGetShader);
-        AddObject(out_p_ppClassInstances, out_hp_ppClassInstances, format::ApiCall_ID3D11DeviceContext_CSGetShader);
+        AddObjects(out_p_ppClassInstances, ppClassInstances->GetLength(), out_hp_ppClassInstances, !pNumClassInstances->IsNull() ? *pNumClassInstances->GetOutputPointer() : 0, format::ApiCall_ID3D11DeviceContext_CSGetShader);
     }
 }
 
@@ -11554,13 +11665,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_CSGetSamplers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(1);
+        if(!ppSamplers->IsNull()) ppSamplers->SetHandleLength(NumSamplers);
         auto out_p_ppSamplers    = ppSamplers->GetPointer();
         auto out_hp_ppSamplers   = ppSamplers->GetHandlePointer();
         replay_object->CSGetSamplers(StartSlot,
                                      NumSamplers,
                                      out_hp_ppSamplers);
-        AddObject(out_p_ppSamplers, out_hp_ppSamplers, format::ApiCall_ID3D11DeviceContext_CSGetSamplers);
+        AddObjects(out_p_ppSamplers, ppSamplers->GetLength(), out_hp_ppSamplers, NumSamplers, format::ApiCall_ID3D11DeviceContext_CSGetSamplers);
     }
 }
 
@@ -11574,13 +11685,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_CSGetConstantBuffers(
     auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         replay_object->CSGetConstantBuffers(StartSlot,
                                             NumBuffers,
                                             out_hp_ppConstantBuffers);
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext_CSGetConstantBuffers);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext_CSGetConstantBuffers);
     }
 }
 
@@ -14828,7 +14939,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_VSGetConstantBuffers1(
     auto replay_object = MapObject<ID3D11DeviceContext1>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         if(!pFirstConstant->IsNull())
@@ -14844,7 +14955,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_VSGetConstantBuffers1(
                                              out_hp_ppConstantBuffers,
                                              pFirstConstant->GetOutputPointer(),
                                              pNumConstants->GetOutputPointer());
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext1_VSGetConstantBuffers1);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext1_VSGetConstantBuffers1);
     }
 }
 
@@ -14860,7 +14971,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_HSGetConstantBuffers1(
     auto replay_object = MapObject<ID3D11DeviceContext1>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         if(!pFirstConstant->IsNull())
@@ -14876,7 +14987,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_HSGetConstantBuffers1(
                                              out_hp_ppConstantBuffers,
                                              pFirstConstant->GetOutputPointer(),
                                              pNumConstants->GetOutputPointer());
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext1_HSGetConstantBuffers1);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext1_HSGetConstantBuffers1);
     }
 }
 
@@ -14892,7 +15003,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_DSGetConstantBuffers1(
     auto replay_object = MapObject<ID3D11DeviceContext1>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         if(!pFirstConstant->IsNull())
@@ -14908,7 +15019,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_DSGetConstantBuffers1(
                                              out_hp_ppConstantBuffers,
                                              pFirstConstant->GetOutputPointer(),
                                              pNumConstants->GetOutputPointer());
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext1_DSGetConstantBuffers1);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext1_DSGetConstantBuffers1);
     }
 }
 
@@ -14924,7 +15035,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_GSGetConstantBuffers1(
     auto replay_object = MapObject<ID3D11DeviceContext1>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         if(!pFirstConstant->IsNull())
@@ -14940,7 +15051,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_GSGetConstantBuffers1(
                                              out_hp_ppConstantBuffers,
                                              pFirstConstant->GetOutputPointer(),
                                              pNumConstants->GetOutputPointer());
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext1_GSGetConstantBuffers1);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext1_GSGetConstantBuffers1);
     }
 }
 
@@ -14956,7 +15067,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_PSGetConstantBuffers1(
     auto replay_object = MapObject<ID3D11DeviceContext1>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         if(!pFirstConstant->IsNull())
@@ -14972,7 +15083,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_PSGetConstantBuffers1(
                                              out_hp_ppConstantBuffers,
                                              pFirstConstant->GetOutputPointer(),
                                              pNumConstants->GetOutputPointer());
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext1_PSGetConstantBuffers1);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext1_PSGetConstantBuffers1);
     }
 }
 
@@ -14988,7 +15099,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_CSGetConstantBuffers1(
     auto replay_object = MapObject<ID3D11DeviceContext1>(object_id);
     if (replay_object != nullptr)
     {
-        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(1);
+        if(!ppConstantBuffers->IsNull()) ppConstantBuffers->SetHandleLength(NumBuffers);
         auto out_p_ppConstantBuffers    = ppConstantBuffers->GetPointer();
         auto out_hp_ppConstantBuffers   = ppConstantBuffers->GetHandlePointer();
         if(!pFirstConstant->IsNull())
@@ -15004,7 +15115,7 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext1_CSGetConstantBuffers1(
                                              out_hp_ppConstantBuffers,
                                              pFirstConstant->GetOutputPointer(),
                                              pNumConstants->GetOutputPointer());
-        AddObject(out_p_ppConstantBuffers, out_hp_ppConstantBuffers, format::ApiCall_ID3D11DeviceContext1_CSGetConstantBuffers1);
+        AddObjects(out_p_ppConstantBuffers, ppConstantBuffers->GetLength(), out_hp_ppConstantBuffers, NumBuffers, format::ApiCall_ID3D11DeviceContext1_CSGetConstantBuffers1);
     }
 }
 
