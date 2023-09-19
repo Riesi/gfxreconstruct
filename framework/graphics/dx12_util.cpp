@@ -1,6 +1,7 @@
 /*
 ** Copyright (c) 2021 LunarG, Inc.
 ** Copyright (c) 2021-2023 Advanced Micro Devices, Inc. All rights reserved.
+** Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a
 ** copy of this software and associated documentation files (the "Software"),
@@ -1094,6 +1095,301 @@ bool IsTextureWithUnknownLayout(D3D12_RESOURCE_DIMENSION dimension, D3D12_TEXTUR
     }
 
     return is_texture_with_unknown_layout;
+}
+
+bool IsFormatCompressed(DXGI_FORMAT format)
+{
+    switch (format)
+    {
+        case DXGI_FORMAT_BC1_TYPELESS:
+        case DXGI_FORMAT_BC1_UNORM:
+        case DXGI_FORMAT_BC1_UNORM_SRGB:
+        case DXGI_FORMAT_BC2_TYPELESS:
+        case DXGI_FORMAT_BC2_UNORM:
+        case DXGI_FORMAT_BC2_UNORM_SRGB:
+        case DXGI_FORMAT_BC3_TYPELESS:
+        case DXGI_FORMAT_BC3_UNORM:
+        case DXGI_FORMAT_BC3_UNORM_SRGB:
+        case DXGI_FORMAT_BC4_TYPELESS:
+        case DXGI_FORMAT_BC4_UNORM:
+        case DXGI_FORMAT_BC4_SNORM:
+        case DXGI_FORMAT_BC5_TYPELESS:
+        case DXGI_FORMAT_BC5_UNORM:
+        case DXGI_FORMAT_BC5_SNORM:
+        case DXGI_FORMAT_BC6H_TYPELESS:
+        case DXGI_FORMAT_BC6H_UF16:
+        case DXGI_FORMAT_BC6H_SF16:
+        case DXGI_FORMAT_BC7_TYPELESS:
+        case DXGI_FORMAT_BC7_UNORM:
+        case DXGI_FORMAT_BC7_UNORM_SRGB:
+            return true;
+    }
+
+    return false;
+}
+
+uint64_t GetCompressedSubresourcePixelByteSize(DXGI_FORMAT format)
+{
+    static const std::unordered_map<DXGI_FORMAT, uint8_t> byte_size_map = {
+        { DXGI_FORMAT_BC1_TYPELESS, 8 },   { DXGI_FORMAT_BC1_UNORM, 8 },  { DXGI_FORMAT_BC1_UNORM_SRGB, 8 },
+        { DXGI_FORMAT_BC2_TYPELESS, 16 },  { DXGI_FORMAT_BC2_UNORM, 16 }, { DXGI_FORMAT_BC2_UNORM_SRGB, 16 },
+        { DXGI_FORMAT_BC3_TYPELESS, 16 },  { DXGI_FORMAT_BC3_UNORM, 16 }, { DXGI_FORMAT_BC3_UNORM_SRGB, 16 },
+        { DXGI_FORMAT_BC4_TYPELESS, 8 },   { DXGI_FORMAT_BC4_UNORM, 8 },  { DXGI_FORMAT_BC4_SNORM, 8 },
+        { DXGI_FORMAT_BC5_TYPELESS, 16 },  { DXGI_FORMAT_BC5_UNORM, 16 }, { DXGI_FORMAT_BC5_SNORM, 16 },
+        { DXGI_FORMAT_BC6H_TYPELESS, 16 }, { DXGI_FORMAT_BC6H_UF16, 16 }, { DXGI_FORMAT_BC6H_SF16, 16 },
+        { DXGI_FORMAT_BC7_TYPELESS, 16 },  { DXGI_FORMAT_BC7_UNORM, 16 }, { DXGI_FORMAT_BC7_UNORM_SRGB, 16 }
+    };
+
+    const auto iter = byte_size_map.find(format);
+    if (iter != byte_size_map.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        GFXRECON_LOG_ERROR("Unsupported format: %d", format);
+    }
+
+    return 0;
+}
+
+uint64_t GetPixelByteSize(DXGI_FORMAT format)
+{
+    auto size = graphics::dx12::GetSubresourcePixelByteSize(format);
+
+    if (size == 0)
+    {
+        // Check for BC format.
+        size = GetCompressedSubresourcePixelByteSize(format);
+
+        if ((size == 0) && (format == DXGI_FORMAT_R1_UNORM))
+        {
+            size = 1;
+        }
+    }
+
+    return size;
+}
+
+uint32_t GetNumSubresources(const D3D11_TEXTURE1D_DESC* desc)
+{
+    GFXRECON_ASSERT(desc != nullptr);
+    return desc->MipLevels * desc->ArraySize;
+}
+
+uint32_t GetNumSubresources(const D3D11_TEXTURE2D_DESC* desc)
+{
+    GFXRECON_ASSERT(desc != nullptr);
+    return desc->MipLevels * desc->ArraySize;
+}
+
+uint32_t GetNumSubresources(const D3D11_TEXTURE3D_DESC* desc)
+{
+    GFXRECON_ASSERT(desc != nullptr);
+    return desc->MipLevels;
+}
+
+uint32_t GetSubresourceDimension(uint32_t dimension, uint32_t mip_levels, uint32_t subresource)
+{
+    auto mip_level = subresource % mip_levels;
+    return std::max(dimension >> mip_level, 1u);
+}
+
+uint64_t GetSubresourceSize(const D3D11_TEXTURE1D_DESC* desc, const D3D11_SUBRESOURCE_DATA* data, uint32_t subresource)
+{
+    GFXRECON_UNREFERENCED_PARAMETER(data);
+    GFXRECON_ASSERT(desc != nullptr);
+    return GetSubresourceSizeTex1D(desc->Format, desc->Width, desc->MipLevels, subresource);
+}
+
+uint64_t GetSubresourceSize(const D3D11_TEXTURE2D_DESC* desc, const D3D11_SUBRESOURCE_DATA* data, uint32_t subresource)
+{
+    GFXRECON_ASSERT(data != nullptr);
+    GFXRECON_ASSERT(desc != nullptr);
+    return GetSubresourceSizeTex2D(desc->Format, desc->Height, desc->MipLevels, data->SysMemPitch, subresource);
+}
+
+uint64_t GetSubresourceSize(const D3D11_TEXTURE3D_DESC* desc, const D3D11_SUBRESOURCE_DATA* data, uint32_t subresource)
+{
+    GFXRECON_ASSERT(data != nullptr);
+    GFXRECON_ASSERT(desc != nullptr);
+    return GetSubresourceSizeTex3D(desc->Depth, desc->MipLevels, data->SysMemSlicePitch, subresource);
+}
+
+uint64_t GetSubresourceSize(D3D11_RESOURCE_DIMENSION type,
+                            DXGI_FORMAT              format,
+                            uint32_t                 width,
+                            uint32_t                 height,
+                            uint32_t                 depth,
+                            uint32_t                 mip_levels,
+                            uint32_t                 row_pitch,
+                            uint32_t                 depth_pitch,
+                            uint32_t                 subresource)
+{
+    auto data_size = 0ull;
+
+    switch (type)
+    {
+        case D3D12_RESOURCE_DIMENSION_BUFFER:
+            data_size = width;
+            break;
+        case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
+            data_size = GetSubresourceSizeTex1D(format, width, mip_levels, subresource);
+            break;
+        case D3D12_RESOURCE_DIMENSION_TEXTURE2D:
+            data_size = GetSubresourceSizeTex2D(format, height, mip_levels, row_pitch, subresource);
+            break;
+        case D3D12_RESOURCE_DIMENSION_TEXTURE3D:
+            data_size = GetSubresourceSizeTex3D(depth, mip_levels, depth_pitch, subresource);
+            break;
+        case D3D12_RESOURCE_DIMENSION_UNKNOWN:
+            GFXRECON_LOG_ERROR("Detected resource with D3D11_RESOURCE_DIMENSION_UNKNOWN dimension");
+            break;
+        default:
+            GFXRECON_LOG_DEBUG("Unrecognized D3D11 resource dimension");
+            break;
+    }
+
+    return data_size;
+}
+
+uint64_t GetSubresourceSizeTex1D(DXGI_FORMAT format, uint32_t width, uint32_t mip_levels, uint32_t subresource)
+{
+    auto mip_level = subresource % mip_levels;
+    auto mip_width = std::max(width >> mip_level, 1u);
+
+    return static_cast<uint64_t>(mip_width) * GetPixelByteSize(format);
+}
+
+uint64_t GetSubresourceSizeTex2D(
+    DXGI_FORMAT format, uint32_t height, uint32_t mip_levels, uint32_t row_pitch, uint32_t subresource)
+{
+
+    auto mip_level  = subresource % mip_levels;
+    auto mip_height = std::max(height >> mip_level, 1u);
+
+    if (IsFormatCompressed(format))
+    {
+        mip_height = (mip_height + 3) / 4;
+    }
+
+    return static_cast<uint64_t>(mip_height) * row_pitch;
+}
+
+uint64_t GetSubresourceSizeTex3D(uint32_t depth, uint32_t mip_levels, uint32_t depth_pitch, uint32_t subresource)
+{
+    auto mip_level = subresource % mip_levels;
+    auto mip_depth = std::max(depth >> mip_level, 1u);
+
+    return static_cast<uint64_t>(mip_depth) * depth_pitch;
+}
+
+uint64_t GetSubresourceWriteDataSize(D3D11_RESOURCE_DIMENSION dst_type,
+                                     DXGI_FORMAT              dst_format,
+                                     uint32_t                 dst_width,
+                                     uint32_t                 dst_height,
+                                     uint32_t                 dst_depth,
+                                     uint32_t                 dst_mip_levels,
+                                     uint32_t                 dst_subresource,
+                                     const D3D11_BOX*         dst_box,
+                                     uint32_t                 src_row_pitch,
+                                     uint32_t                 src_depth_pitch)
+{
+    auto data_size = 0ull;
+    auto empty_box = false;
+
+    if (dst_box == nullptr)
+    {
+        // If pDstBox == nullptr, the data is written to the destination subresource with no offset
+        // Quote: A pointer to a box that defines the portion of the destination subresource to copy
+        //        the resource data into. If NULL, the data is written to the destination subresource
+        //        with no offset.
+        // Source:
+        // https://docs.microsoft.com/en-us/windows/win32/api/d3d12/nf-d3d12-id3d12resource-writetosubresource
+
+        switch (dst_type)
+        {
+            case D3D12_RESOURCE_DIMENSION_BUFFER:
+                data_size = dst_width;
+                break;
+            case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
+                data_size = GetSubresourceSizeTex1D(dst_format, dst_width, dst_mip_levels, dst_subresource);
+                break;
+            case D3D12_RESOURCE_DIMENSION_TEXTURE2D:
+                data_size =
+                    GetSubresourceSizeTex2D(dst_format, dst_height, dst_mip_levels, src_row_pitch, dst_subresource);
+                break;
+            case D3D12_RESOURCE_DIMENSION_TEXTURE3D:
+                data_size = GetSubresourceSizeTex3D(dst_depth, dst_mip_levels, src_depth_pitch, dst_subresource);
+                break;
+            case D3D12_RESOURCE_DIMENSION_UNKNOWN:
+                GFXRECON_LOG_ERROR("Detected resource with D3D11_RESOURCE_DIMENSION_UNKNOWN dimension");
+                break;
+            default:
+                GFXRECON_LOG_DEBUG("Unrecognized D3D11 resource dimension");
+                break;
+        }
+    }
+    else
+    {
+        if ((dst_box->left >= dst_box->right) || (dst_box->front >= dst_box->back) || (dst_box->top >= dst_box->bottom))
+        {
+            empty_box = true;
+        }
+
+        // When the box is empty, UpdateSubresource call doesn't perform any operation
+        // Quote: An empty box results in a no-op. A box is empty if the top value is greater than or equal to
+        //        the bottom value, or the left value is greater than or equal to the right value, or the front
+        //        value is greater than or equal to the back value. When the box is empty, this method doesn't
+        //        perform any operation.
+        // Source:
+        // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-id3d11devicecontext-updatesubresource
+        if (!empty_box)
+        {
+            auto box_width = dst_box->right - dst_box->left;
+
+            switch (dst_type)
+            {
+                case D3D12_RESOURCE_DIMENSION_BUFFER:
+                    data_size = static_cast<uint64_t>(box_width);
+                    break;
+                case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
+                    data_size = static_cast<uint64_t>(box_width) * GetPixelByteSize(dst_format);
+                    break;
+                case D3D12_RESOURCE_DIMENSION_TEXTURE2D:
+                {
+                    auto box_height = dst_box->bottom - dst_box->top;
+
+                    if (IsFormatCompressed(dst_format))
+                    {
+                        box_width  = (box_width + 3) / 4;
+                        box_height = (box_height + 3) / 4;
+                    }
+
+                    data_size = static_cast<uint64_t>(box_width) * static_cast<uint64_t>(box_height) *
+                                GetPixelByteSize(dst_format);
+                    break;
+                }
+                case D3D12_RESOURCE_DIMENSION_TEXTURE3D:
+                {
+                    auto box_height = dst_box->bottom - dst_box->top;
+                    auto box_depth  = dst_box->back - dst_box->front;
+
+                    data_size = static_cast<uint64_t>(box_width) * static_cast<uint64_t>(box_height) *
+                                static_cast<uint64_t>(box_depth) * GetPixelByteSize(dst_format);
+                    break;
+                }
+                case D3D12_RESOURCE_DIMENSION_UNKNOWN:
+                    GFXRECON_LOG_ERROR("Detected resource with D3D12_RESOURCE_DIMENSION_UNKNOWN dimension");
+                    break;
+                default:
+                    GFXRECON_LOG_ERROR("Detected invalid resource dimensions");
+                    break;
+            }
+        }
+    }
+
+    return data_size;
 }
 
 GFXRECON_END_NAMESPACE(dx12)

@@ -1,6 +1,7 @@
 /*
 ** Copyright (c) 2021-2022 LunarG, Inc.
 ** Copyright (c) 2021-2023 Advanced Micro Devices, Inc. All rights reserved.
+** Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a
 ** copy of this software and associated documentation files (the "Software"),
@@ -124,6 +125,56 @@ class Dx12ReplayConsumerBase : public Dx12Consumer
                                                            UINT                                     src_row_pitch,
                                                            UINT src_depth_pitch) override;
 
+    virtual void Process_ID3D11Device_CreateBuffer(const ApiCallInfo&                                    call_info,
+                                                   format::HandleId                                      object_id,
+                                                   HRESULT                                               return_value,
+                                                   StructPointerDecoder<Decoded_D3D11_BUFFER_DESC>*      pDesc,
+                                                   StructPointerDecoder<Decoded_D3D11_SUBRESOURCE_DATA>* pInitialData,
+                                                   HandlePointerDecoder<ID3D11Buffer*>* ppBuffer) override;
+
+    virtual void
+    Process_ID3D11Device_CreateTexture1D(const ApiCallInfo&                                    call_info,
+                                         format::HandleId                                      object_id,
+                                         HRESULT                                               return_value,
+                                         StructPointerDecoder<Decoded_D3D11_TEXTURE1D_DESC>*   pDesc,
+                                         StructPointerDecoder<Decoded_D3D11_SUBRESOURCE_DATA>* pInitialData,
+                                         HandlePointerDecoder<ID3D11Texture1D*>*               ppTexture1D) override;
+
+    virtual void
+    Process_ID3D11Device_CreateTexture2D(const ApiCallInfo&                                    call_info,
+                                         format::HandleId                                      object_id,
+                                         HRESULT                                               return_value,
+                                         StructPointerDecoder<Decoded_D3D11_TEXTURE2D_DESC>*   pDesc,
+                                         StructPointerDecoder<Decoded_D3D11_SUBRESOURCE_DATA>* pInitialData,
+                                         HandlePointerDecoder<ID3D11Texture2D*>*               ppTexture2D) override;
+
+    virtual void
+    Process_ID3D11Device_CreateTexture3D(const ApiCallInfo&                                    call_info,
+                                         format::HandleId                                      object_id,
+                                         HRESULT                                               return_value,
+                                         StructPointerDecoder<Decoded_D3D11_TEXTURE3D_DESC>*   pDesc,
+                                         StructPointerDecoder<Decoded_D3D11_SUBRESOURCE_DATA>* pInitialData,
+                                         HandlePointerDecoder<ID3D11Texture3D*>*               ppTexture3D) override;
+
+    virtual void Process_ID3D11DeviceContext_UpdateSubresource(const ApiCallInfo&                       call_info,
+                                                               format::HandleId                         object_id,
+                                                               format::HandleId                         pDstResource,
+                                                               UINT                                     DstSubresource,
+                                                               StructPointerDecoder<Decoded_D3D11_BOX>* pDstBox,
+                                                               PointerDecoder<uint8_t>*                 pSrcData,
+                                                               UINT                                     SrcRowPitch,
+                                                               UINT SrcDepthPitch) override;
+
+    virtual void Process_ID3D11DeviceContext1_UpdateSubresource1(const ApiCallInfo& call_info,
+                                                                 format::HandleId   object_id,
+                                                                 format::HandleId   pDstResource,
+                                                                 UINT               DstSubresource,
+                                                                 StructPointerDecoder<Decoded_D3D11_BOX>* pDstBox,
+                                                                 PointerDecoder<uint8_t>*                 pSrcData,
+                                                                 UINT                                     SrcRowPitch,
+                                                                 UINT                                     SrcDepthPitch,
+                                                                 UINT CopyFlags) override;
+
     template <typename T>
     T* MapObject(const format::HandleId id)
     {
@@ -145,7 +196,7 @@ class Dx12ReplayConsumerBase : public Dx12Consumer
 
     IDXGIAdapter* GetAdapter();
 
-  protected:    
+  protected:
     void MapGpuDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE& handle);
 
     void MapGpuDescriptorHandle(uint8_t* dst_handle_ptr, const uint8_t* src_handle_ptr);

@@ -729,6 +729,24 @@ ToString(const D3D12_RAYTRACING_GEOMETRY_DESC& obj, ToStringFlags toStringFlags,
 }
 
 template <>
+std::string ToString<D3D11_SUBRESOURCE_DATA>(const D3D11_SUBRESOURCE_DATA& obj,
+                                             ToStringFlags                 toStringFlags,
+                                             uint32_t                      tabCount,
+                                             uint32_t                      tabSize)
+{
+    // clang-format off
+    return ObjectToString(toStringFlags, tabCount, tabSize,
+        [&](std::stringstream& strStrm)
+        {
+            FieldToString(strStrm, true, "pSysMem", toStringFlags, tabCount, tabSize, '"' + PtrToString(obj.pSysMem) + '"');
+            FieldToString(strStrm, false, "SysMemPitch", toStringFlags, tabCount, tabSize, '"' + ToString(obj.SysMemPitch, toStringFlags, tabCount, tabSize) + '"');
+            FieldToString(strStrm, false, "SysMemSlicePitch", toStringFlags, tabCount, tabSize, '"' + ToString(obj.SysMemSlicePitch, toStringFlags, tabCount, tabSize) + '"');
+        }
+    );
+    // clang-format on
+}
+
+template <>
 std::string ToString<D3D11_BUFFER_SRV>(const D3D11_BUFFER_SRV& obj,
                                        ToStringFlags           toStringFlags,
                                        uint32_t                tabCount,

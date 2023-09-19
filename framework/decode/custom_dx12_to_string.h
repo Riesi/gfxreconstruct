@@ -148,6 +148,12 @@ std::string ToString(const D3D12_RAYTRACING_GEOMETRY_DESC& obj,
                      uint32_t                              tabSize       = kToStringDefaultTabSize);
 
 template <>
+std::string ToString<D3D11_SUBRESOURCE_DATA>(const D3D11_SUBRESOURCE_DATA& obj,
+                                             ToStringFlags                 toStringFlags,
+                                             uint32_t                      tabCount,
+                                             uint32_t                      tabSize);
+
+template <>
 std::string ToString<D3D11_BUFFER_SRV>(const D3D11_BUFFER_SRV& obj,
                                        ToStringFlags           toStringFlags,
                                        uint32_t                tabCount,
