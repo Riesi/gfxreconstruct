@@ -971,14 +971,18 @@ class D3D12CaptureManager : public CaptureManager
     void                          EnableDRED();
     bool                          RvAnnotationActive();
 
-    void                              PrePresent(IDXGISwapChain_Wrapper* wrapper);
-    void                              PostPresent(IDXGISwapChain_Wrapper* wrapper);
+    void PrePresent(IDXGISwapChain_Wrapper* wrapper);
+    void PostPresent(IDXGISwapChain_Wrapper* wrapper);
 
     std::shared_ptr<ID3D11ResourceInfo> GetResourceInfo(ID3D11Resource_Wrapper* wrapper);
-    void                                FreeMappedResourceMemory(ID3D11Resource_Wrapper* wrapper);
-    void InitializeID3D11Texture2DInfo(ID3D11Texture2D_Wrapper* wrapper, const D3D11_TEXTURE2D_DESC* desc);
-    void AddViewResourceRef(ID3D11ViewInfo* info, ID3D11Resource* resource);
-    void ReleaseViewResourceRef(ID3D11ViewInfo* info);
+    void*
+          AllocateMappedResourceMemory(util::PageGuardManager* manager, MappedSubresource& mapped_subresource, size_t size);
+    void* GetMappedResourceMemory(util::PageGuardManager* manager, const MappedSubresource& mapped_subresource);
+    void* UpdateDiscardedResourceMemory(util::PageGuardManager* manager, const MappedSubresource& mapped_subresource);
+    void  FreeMappedResourceMemory(ID3D11Resource_Wrapper* wrapper);
+    void  InitializeID3D11Texture2DInfo(ID3D11Texture2D_Wrapper* wrapper, const D3D11_TEXTURE2D_DESC* desc);
+    void  AddViewResourceRef(ID3D11ViewInfo* info, ID3D11Resource* resource);
+    void  ReleaseViewResourceRef(ID3D11ViewInfo* info);
 
   private:
     static D3D12CaptureManager*       instance_;
