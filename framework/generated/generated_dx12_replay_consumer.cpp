@@ -75,11 +75,11 @@ void Dx12ReplayConsumer::Process_CreateDXGIFactory2(
     Decoded_GUID                                riid,
     HandlePointerDecoder<void*>*                ppFactory)
 {
-    DxObjectInfo object_info{};
+    DxObjectInfo object_info_ppFactory{};
     if(!ppFactory->IsNull())
     {
         ppFactory->SetHandleLength(1);
-        ppFactory->SetConsumerData(0, &object_info);
+        ppFactory->SetConsumerData(0, &object_info_ppFactory);
     }
     auto replay_result = OverrideCreateDXGIFactory2(return_value,
                                                     Flags,
@@ -87,7 +87,7 @@ void Dx12ReplayConsumer::Process_CreateDXGIFactory2(
                                                     ppFactory);
     if (SUCCEEDED(replay_result))
     {
-        AddObject(ppFactory->GetPointer(), ppFactory->GetHandlePointer(), std::move(object_info), format::ApiCall_CreateDXGIFactory2);
+        AddObject(ppFactory->GetPointer(), ppFactory->GetHandlePointer(), std::move(object_info_ppFactory), format::ApiCall_CreateDXGIFactory2);
     }
     CheckReplayResult("CreateDXGIFactory2", return_value, replay_result);
 }
@@ -223,11 +223,11 @@ void Dx12ReplayConsumer::Process_D3D12CreateDevice(
     HandlePointerDecoder<void*>*                ppDevice)
 {
     auto in_pAdapter = GetObjectInfo(pAdapter);
-    DxObjectInfo object_info{};
+    DxObjectInfo object_info_ppDevice{};
     if(!ppDevice->IsNull())
     {
         ppDevice->SetHandleLength(1);
-        ppDevice->SetConsumerData(0, &object_info);
+        ppDevice->SetConsumerData(0, &object_info_ppDevice);
     }
     auto replay_result = OverrideD3D12CreateDevice(return_value,
                                                    in_pAdapter,
@@ -236,7 +236,7 @@ void Dx12ReplayConsumer::Process_D3D12CreateDevice(
                                                    ppDevice);
     if (SUCCEEDED(replay_result))
     {
-        AddObject(ppDevice->GetPointer(), ppDevice->GetHandlePointer(), std::move(object_info), format::ApiCall_D3D12CreateDevice);
+        AddObject(ppDevice->GetPointer(), ppDevice->GetHandlePointer(), std::move(object_info_ppDevice), format::ApiCall_D3D12CreateDevice);
     }
     CheckReplayResult("D3D12CreateDevice", return_value, replay_result);
 }
@@ -1025,11 +1025,11 @@ void Dx12ReplayConsumer::Process_IDXGISwapChain_GetBuffer(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppSurface{};
         if(!ppSurface->IsNull())
         {
             ppSurface->SetHandleLength(1);
-            ppSurface->SetConsumerData(0, &object_info);
+            ppSurface->SetConsumerData(0, &object_info_ppSurface);
         }
         auto replay_result = OverrideGetBuffer(replay_object,
                                                return_value,
@@ -1038,7 +1038,7 @@ void Dx12ReplayConsumer::Process_IDXGISwapChain_GetBuffer(
                                                ppSurface);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppSurface->GetPointer(), ppSurface->GetHandlePointer(), std::move(object_info), format::ApiCall_IDXGISwapChain_GetBuffer);
+            AddObject(ppSurface->GetPointer(), ppSurface->GetHandlePointer(), std::move(object_info_ppSurface), format::ApiCall_IDXGISwapChain_GetBuffer);
         }
         CheckReplayResult("IDXGISwapChain_GetBuffer", return_value, replay_result);
     }
@@ -1276,11 +1276,11 @@ void Dx12ReplayConsumer::Process_IDXGIFactory_CreateSwapChain(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pDevice = GetObjectInfo(pDevice);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppSwapChain{};
         if(!ppSwapChain->IsNull())
         {
             ppSwapChain->SetHandleLength(1);
-            ppSwapChain->SetConsumerData(0, &object_info);
+            ppSwapChain->SetConsumerData(0, &object_info_ppSwapChain);
         }
         auto replay_result = OverrideCreateSwapChain(replay_object,
                                                      return_value,
@@ -1289,7 +1289,7 @@ void Dx12ReplayConsumer::Process_IDXGIFactory_CreateSwapChain(
                                                      ppSwapChain);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info), format::ApiCall_IDXGIFactory_CreateSwapChain);
+            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info_ppSwapChain), format::ApiCall_IDXGIFactory_CreateSwapChain);
         }
         CheckReplayResult("IDXGIFactory_CreateSwapChain", return_value, replay_result);
     }
@@ -2067,11 +2067,11 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForHwnd(
     {
         auto in_pDevice = GetObjectInfo(pDevice);
         auto in_pRestrictToOutput = GetObjectInfo(pRestrictToOutput);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppSwapChain{};
         if(!ppSwapChain->IsNull())
         {
             ppSwapChain->SetHandleLength(1);
-            ppSwapChain->SetConsumerData(0, &object_info);
+            ppSwapChain->SetConsumerData(0, &object_info_ppSwapChain);
         }
         auto replay_result = OverrideCreateSwapChainForHwnd(replay_object,
                                                             return_value,
@@ -2083,7 +2083,7 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForHwnd(
                                                             ppSwapChain);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info), format::ApiCall_IDXGIFactory2_CreateSwapChainForHwnd);
+            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info_ppSwapChain), format::ApiCall_IDXGIFactory2_CreateSwapChainForHwnd);
         }
         CheckReplayResult("IDXGIFactory2_CreateSwapChainForHwnd", return_value, replay_result);
     }
@@ -2105,11 +2105,11 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForCoreWindow(
         auto in_pDevice = GetObjectInfo(pDevice);
         auto in_pWindow = GetObjectInfo(pWindow);
         auto in_pRestrictToOutput = GetObjectInfo(pRestrictToOutput);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppSwapChain{};
         if(!ppSwapChain->IsNull())
         {
             ppSwapChain->SetHandleLength(1);
-            ppSwapChain->SetConsumerData(0, &object_info);
+            ppSwapChain->SetConsumerData(0, &object_info_ppSwapChain);
         }
         auto replay_result = OverrideCreateSwapChainForCoreWindow(replay_object,
                                                                   return_value,
@@ -2120,7 +2120,7 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForCoreWindow(
                                                                   ppSwapChain);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info), format::ApiCall_IDXGIFactory2_CreateSwapChainForCoreWindow);
+            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info_ppSwapChain), format::ApiCall_IDXGIFactory2_CreateSwapChainForCoreWindow);
         }
         CheckReplayResult("IDXGIFactory2_CreateSwapChainForCoreWindow", return_value, replay_result);
     }
@@ -2273,11 +2273,11 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForComposition(
     {
         auto in_pDevice = GetObjectInfo(pDevice);
         auto in_pRestrictToOutput = GetObjectInfo(pRestrictToOutput);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppSwapChain{};
         if(!ppSwapChain->IsNull())
         {
             ppSwapChain->SetHandleLength(1);
-            ppSwapChain->SetConsumerData(0, &object_info);
+            ppSwapChain->SetConsumerData(0, &object_info_ppSwapChain);
         }
         auto replay_result = OverrideCreateSwapChainForComposition(replay_object,
                                                                    return_value,
@@ -2287,7 +2287,7 @@ void Dx12ReplayConsumer::Process_IDXGIFactory2_CreateSwapChainForComposition(
                                                                    ppSwapChain);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info), format::ApiCall_IDXGIFactory2_CreateSwapChainForComposition);
+            AddObject(ppSwapChain->GetPointer(), ppSwapChain->GetHandlePointer(), std::move(object_info_ppSwapChain), format::ApiCall_IDXGIFactory2_CreateSwapChainForComposition);
         }
         CheckReplayResult("IDXGIFactory2_CreateSwapChainForComposition", return_value, replay_result);
     }
@@ -4962,11 +4962,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandQueue(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppCommandQueue{};
         if(!ppCommandQueue->IsNull())
         {
             ppCommandQueue->SetHandleLength(1);
-            ppCommandQueue->SetConsumerData(0, &object_info);
+            ppCommandQueue->SetConsumerData(0, &object_info_ppCommandQueue);
         }
         auto replay_result = OverrideCreateCommandQueue(replay_object,
                                                         return_value,
@@ -4975,7 +4975,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandQueue(
                                                         ppCommandQueue);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppCommandQueue->GetPointer(), ppCommandQueue->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateCommandQueue);
+            AddObject(ppCommandQueue->GetPointer(), ppCommandQueue->GetHandlePointer(), std::move(object_info_ppCommandQueue), format::ApiCall_ID3D12Device_CreateCommandQueue);
         }
         CheckReplayResult("ID3D12Device_CreateCommandQueue", return_value, replay_result);
     }
@@ -5018,11 +5018,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateGraphicsPipelineState(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppPipelineState{};
         if(!ppPipelineState->IsNull())
         {
             ppPipelineState->SetHandleLength(1);
-            ppPipelineState->SetConsumerData(0, &object_info);
+            ppPipelineState->SetConsumerData(0, &object_info_ppPipelineState);
         }
         auto replay_result = OverrideCreateGraphicsPipelineState(replay_object,
                                                                  return_value,
@@ -5031,7 +5031,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateGraphicsPipelineState(
                                                                  ppPipelineState);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateGraphicsPipelineState);
+            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info_ppPipelineState), format::ApiCall_ID3D12Device_CreateGraphicsPipelineState);
         }
         CheckReplayResult("ID3D12Device_CreateGraphicsPipelineState", return_value, replay_result);
     }
@@ -5049,11 +5049,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateComputePipelineState(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppPipelineState{};
         if(!ppPipelineState->IsNull())
         {
             ppPipelineState->SetHandleLength(1);
-            ppPipelineState->SetConsumerData(0, &object_info);
+            ppPipelineState->SetConsumerData(0, &object_info_ppPipelineState);
         }
         auto replay_result = OverrideCreateComputePipelineState(replay_object,
                                                                 return_value,
@@ -5062,7 +5062,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateComputePipelineState(
                                                                 ppPipelineState);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateComputePipelineState);
+            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info_ppPipelineState), format::ApiCall_ID3D12Device_CreateComputePipelineState);
         }
         CheckReplayResult("ID3D12Device_CreateComputePipelineState", return_value, replay_result);
     }
@@ -5084,11 +5084,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandList(
     {
         auto in_pCommandAllocator = GetObjectInfo(pCommandAllocator);
         auto in_pInitialState = GetObjectInfo(pInitialState);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppCommandList{};
         if(!ppCommandList->IsNull())
         {
             ppCommandList->SetHandleLength(1);
-            ppCommandList->SetConsumerData(0, &object_info);
+            ppCommandList->SetConsumerData(0, &object_info_ppCommandList);
         }
         auto replay_result = OverrideCreateCommandList(replay_object,
                                                        return_value,
@@ -5100,7 +5100,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandList(
                                                        ppCommandList);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppCommandList->GetPointer(), ppCommandList->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateCommandList);
+            AddObject(ppCommandList->GetPointer(), ppCommandList->GetHandlePointer(), std::move(object_info_ppCommandList), format::ApiCall_ID3D12Device_CreateCommandList);
         }
         CheckReplayResult("ID3D12Device_CreateCommandList", return_value, replay_result);
     }
@@ -5117,11 +5117,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateDescriptorHeap(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvHeap{};
         if(!ppvHeap->IsNull())
         {
             ppvHeap->SetHandleLength(1);
-            ppvHeap->SetConsumerData(0, &object_info);
+            ppvHeap->SetConsumerData(0, &object_info_ppvHeap);
         }
         auto replay_result = OverrideCreateDescriptorHeap(replay_object,
                                                           return_value,
@@ -5130,7 +5130,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateDescriptorHeap(
                                                           ppvHeap);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateDescriptorHeap);
+            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info_ppvHeap), format::ApiCall_ID3D12Device_CreateDescriptorHeap);
         }
         CheckReplayResult("ID3D12Device_CreateDescriptorHeap", return_value, replay_result);
     }
@@ -5164,11 +5164,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateRootSignature(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvRootSignature{};
         if(!ppvRootSignature->IsNull())
         {
             ppvRootSignature->SetHandleLength(1);
-            ppvRootSignature->SetConsumerData(0, &object_info);
+            ppvRootSignature->SetConsumerData(0, &object_info_ppvRootSignature);
         }
         auto replay_result = OverrideCreateRootSignature(replay_object,
                                                          return_value,
@@ -5179,7 +5179,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateRootSignature(
                                                          ppvRootSignature);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvRootSignature->GetPointer(), ppvRootSignature->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateRootSignature);
+            AddObject(ppvRootSignature->GetPointer(), ppvRootSignature->GetHandlePointer(), std::move(object_info_ppvRootSignature), format::ApiCall_ID3D12Device_CreateRootSignature);
         }
         CheckReplayResult("ID3D12Device_CreateRootSignature", return_value, replay_result);
     }
@@ -5385,11 +5385,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommittedResource(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvResource{};
         if(!ppvResource->IsNull())
         {
             ppvResource->SetHandleLength(1);
-            ppvResource->SetConsumerData(0, &object_info);
+            ppvResource->SetConsumerData(0, &object_info_ppvResource);
         }
         auto replay_result = OverrideCreateCommittedResource(replay_object,
                                                              return_value,
@@ -5402,7 +5402,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommittedResource(
                                                              ppvResource);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateCommittedResource);
+            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info_ppvResource), format::ApiCall_ID3D12Device_CreateCommittedResource);
             SetResourceDesc(ppvResource, pDesc);
         }
         CheckReplayResult("ID3D12Device_CreateCommittedResource", return_value, replay_result);
@@ -5420,11 +5420,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateHeap(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvHeap{};
         if(!ppvHeap->IsNull())
         {
             ppvHeap->SetHandleLength(1);
-            ppvHeap->SetConsumerData(0, &object_info);
+            ppvHeap->SetConsumerData(0, &object_info_ppvHeap);
         }
         auto replay_result = OverrideCreateHeap(replay_object,
                                                 return_value,
@@ -5433,7 +5433,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateHeap(
                                                 ppvHeap);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateHeap);
+            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info_ppvHeap), format::ApiCall_ID3D12Device_CreateHeap);
         }
         CheckReplayResult("ID3D12Device_CreateHeap", return_value, replay_result);
     }
@@ -5487,11 +5487,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateReservedResource(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvResource{};
         if(!ppvResource->IsNull())
         {
             ppvResource->SetHandleLength(1);
-            ppvResource->SetConsumerData(0, &object_info);
+            ppvResource->SetConsumerData(0, &object_info_ppvResource);
         }
         auto replay_result = OverrideCreateReservedResource(replay_object,
                                                             return_value,
@@ -5502,7 +5502,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateReservedResource(
                                                             ppvResource);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateReservedResource);
+            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info_ppvResource), format::ApiCall_ID3D12Device_CreateReservedResource);
             SetResourceDesc(ppvResource, pDesc);
         }
         CheckReplayResult("ID3D12Device_CreateReservedResource", return_value, replay_result);
@@ -5636,11 +5636,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateFence(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppFence{};
         if(!ppFence->IsNull())
         {
             ppFence->SetHandleLength(1);
-            ppFence->SetConsumerData(0, &object_info);
+            ppFence->SetConsumerData(0, &object_info_ppFence);
         }
         auto replay_result = OverrideCreateFence(replay_object,
                                                  return_value,
@@ -5650,7 +5650,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateFence(
                                                  ppFence);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppFence->GetPointer(), ppFence->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateFence);
+            AddObject(ppFence->GetPointer(), ppFence->GetHandlePointer(), std::move(object_info_ppFence), format::ApiCall_ID3D12Device_CreateFence);
         }
         CheckReplayResult("ID3D12Device_CreateFence", return_value, replay_result);
     }
@@ -5763,11 +5763,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandSignature(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pRootSignature = GetObjectInfo(pRootSignature);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvCommandSignature{};
         if(!ppvCommandSignature->IsNull())
         {
             ppvCommandSignature->SetHandleLength(1);
-            ppvCommandSignature->SetConsumerData(0, &object_info);
+            ppvCommandSignature->SetConsumerData(0, &object_info_ppvCommandSignature);
         }
         auto replay_result = OverrideCreateCommandSignature(replay_object,
                                                             return_value,
@@ -5777,7 +5777,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device_CreateCommandSignature(
                                                             ppvCommandSignature);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvCommandSignature->GetPointer(), ppvCommandSignature->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device_CreateCommandSignature);
+            AddObject(ppvCommandSignature->GetPointer(), ppvCommandSignature->GetHandlePointer(), std::move(object_info_ppvCommandSignature), format::ApiCall_ID3D12Device_CreateCommandSignature);
         }
         CheckReplayResult("ID3D12Device_CreateCommandSignature", return_value, replay_result);
     }
@@ -5870,11 +5870,11 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary_LoadGraphicsPipeline(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppPipelineState{};
         if(!ppPipelineState->IsNull())
         {
             ppPipelineState->SetHandleLength(1);
-            ppPipelineState->SetConsumerData(0, &object_info);
+            ppPipelineState->SetConsumerData(0, &object_info_ppPipelineState);
         }
         auto replay_result = OverrideLoadGraphicsPipeline(replay_object,
                                                           return_value,
@@ -5884,7 +5884,7 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary_LoadGraphicsPipeline(
                                                           ppPipelineState);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12PipelineLibrary_LoadGraphicsPipeline);
+            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info_ppPipelineState), format::ApiCall_ID3D12PipelineLibrary_LoadGraphicsPipeline);
         }
         CheckReplayResult("ID3D12PipelineLibrary_LoadGraphicsPipeline", return_value, replay_result);
     }
@@ -5903,11 +5903,11 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary_LoadComputePipeline(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppPipelineState{};
         if(!ppPipelineState->IsNull())
         {
             ppPipelineState->SetHandleLength(1);
-            ppPipelineState->SetConsumerData(0, &object_info);
+            ppPipelineState->SetConsumerData(0, &object_info_ppPipelineState);
         }
         auto replay_result = OverrideLoadComputePipeline(replay_object,
                                                          return_value,
@@ -5917,7 +5917,7 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary_LoadComputePipeline(
                                                          ppPipelineState);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12PipelineLibrary_LoadComputePipeline);
+            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info_ppPipelineState), format::ApiCall_ID3D12PipelineLibrary_LoadComputePipeline);
         }
         CheckReplayResult("ID3D12PipelineLibrary_LoadComputePipeline", return_value, replay_result);
     }
@@ -5968,11 +5968,11 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary1_LoadPipeline(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppPipelineState{};
         if(!ppPipelineState->IsNull())
         {
             ppPipelineState->SetHandleLength(1);
-            ppPipelineState->SetConsumerData(0, &object_info);
+            ppPipelineState->SetConsumerData(0, &object_info_ppPipelineState);
         }
         auto replay_result = OverrideLoadPipeline(replay_object,
                                                   return_value,
@@ -5982,7 +5982,7 @@ void Dx12ReplayConsumer::Process_ID3D12PipelineLibrary1_LoadPipeline(
                                                   ppPipelineState);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12PipelineLibrary1_LoadPipeline);
+            AddObject(ppPipelineState->GetPointer(), ppPipelineState->GetHandlePointer(), std::move(object_info_ppPipelineState), format::ApiCall_ID3D12PipelineLibrary1_LoadPipeline);
         }
         CheckReplayResult("ID3D12PipelineLibrary1_LoadPipeline", return_value, replay_result);
     }
@@ -6000,11 +6000,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device1_CreatePipelineLibrary(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppPipelineLibrary{};
         if(!ppPipelineLibrary->IsNull())
         {
             ppPipelineLibrary->SetHandleLength(1);
-            ppPipelineLibrary->SetConsumerData(0, &object_info);
+            ppPipelineLibrary->SetConsumerData(0, &object_info_ppPipelineLibrary);
         }
         auto replay_result = OverrideCreatePipelineLibrary(replay_object,
                                                            return_value,
@@ -6014,7 +6014,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device1_CreatePipelineLibrary(
                                                            ppPipelineLibrary);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppPipelineLibrary->GetPointer(), ppPipelineLibrary->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device1_CreatePipelineLibrary);
+            AddObject(ppPipelineLibrary->GetPointer(), ppPipelineLibrary->GetHandlePointer(), std::move(object_info_ppPipelineLibrary), format::ApiCall_ID3D12Device1_CreatePipelineLibrary);
         }
         CheckReplayResult("ID3D12Device1_CreatePipelineLibrary", return_value, replay_result);
     }
@@ -6100,11 +6100,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device3_OpenExistingHeapFromAddress(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvHeap{};
         if(!ppvHeap->IsNull())
         {
             ppvHeap->SetHandleLength(1);
-            ppvHeap->SetConsumerData(0, &object_info);
+            ppvHeap->SetConsumerData(0, &object_info_ppvHeap);
         }
         auto replay_result = OverrideOpenExistingHeapFromAddress(replay_object,
                                                                  return_value,
@@ -6113,7 +6113,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device3_OpenExistingHeapFromAddress(
                                                                  ppvHeap);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device3_OpenExistingHeapFromAddress);
+            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info_ppvHeap), format::ApiCall_ID3D12Device3_OpenExistingHeapFromAddress);
         }
         CheckReplayResult("ID3D12Device3_OpenExistingHeapFromAddress", return_value, replay_result);
     }
@@ -6231,11 +6231,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateCommandList1(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppCommandList{};
         if(!ppCommandList->IsNull())
         {
             ppCommandList->SetHandleLength(1);
-            ppCommandList->SetConsumerData(0, &object_info);
+            ppCommandList->SetConsumerData(0, &object_info_ppCommandList);
         }
         auto replay_result = OverrideCreateCommandList1(replay_object,
                                                         return_value,
@@ -6246,7 +6246,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateCommandList1(
                                                         ppCommandList);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppCommandList->GetPointer(), ppCommandList->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device4_CreateCommandList1);
+            AddObject(ppCommandList->GetPointer(), ppCommandList->GetHandlePointer(), std::move(object_info_ppCommandList), format::ApiCall_ID3D12Device4_CreateCommandList1);
         }
         CheckReplayResult("ID3D12Device4_CreateCommandList1", return_value, replay_result);
     }
@@ -6294,11 +6294,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateCommittedResource1(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvResource{};
         if(!ppvResource->IsNull())
         {
             ppvResource->SetHandleLength(1);
-            ppvResource->SetConsumerData(0, &object_info);
+            ppvResource->SetConsumerData(0, &object_info_ppvResource);
         }
         auto replay_result = OverrideCreateCommittedResource1(replay_object,
                                                               return_value,
@@ -6312,7 +6312,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateCommittedResource1(
                                                               ppvResource);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device4_CreateCommittedResource1);
+            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info_ppvResource), format::ApiCall_ID3D12Device4_CreateCommittedResource1);
             SetResourceDesc(ppvResource, pDesc);
         }
         CheckReplayResult("ID3D12Device4_CreateCommittedResource1", return_value, replay_result);
@@ -6332,11 +6332,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateHeap1(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvHeap{};
         if(!ppvHeap->IsNull())
         {
             ppvHeap->SetHandleLength(1);
-            ppvHeap->SetConsumerData(0, &object_info);
+            ppvHeap->SetConsumerData(0, &object_info_ppvHeap);
         }
         auto replay_result = OverrideCreateHeap1(replay_object,
                                                  return_value,
@@ -6346,7 +6346,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateHeap1(
                                                  ppvHeap);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device4_CreateHeap1);
+            AddObject(ppvHeap->GetPointer(), ppvHeap->GetHandlePointer(), std::move(object_info_ppvHeap), format::ApiCall_ID3D12Device4_CreateHeap1);
         }
         CheckReplayResult("ID3D12Device4_CreateHeap1", return_value, replay_result);
     }
@@ -6367,11 +6367,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateReservedResource1(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvResource{};
         if(!ppvResource->IsNull())
         {
             ppvResource->SetHandleLength(1);
-            ppvResource->SetConsumerData(0, &object_info);
+            ppvResource->SetConsumerData(0, &object_info_ppvResource);
         }
         auto replay_result = OverrideCreateReservedResource1(replay_object,
                                                              return_value,
@@ -6383,7 +6383,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device4_CreateReservedResource1(
                                                              ppvResource);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device4_CreateReservedResource1);
+            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info_ppvResource), format::ApiCall_ID3D12Device4_CreateReservedResource1);
             SetResourceDesc(ppvResource, pDesc);
         }
         CheckReplayResult("ID3D12Device4_CreateReservedResource1", return_value, replay_result);
@@ -6711,11 +6711,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device5_CreateStateObject(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         MapStructObjects(pDesc->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppStateObject{};
         if(!ppStateObject->IsNull())
         {
             ppStateObject->SetHandleLength(1);
-            ppStateObject->SetConsumerData(0, &object_info);
+            ppStateObject->SetConsumerData(0, &object_info_ppStateObject);
         }
         auto replay_result = OverrideCreateStateObject(replay_object,
                                                        return_value,
@@ -6724,7 +6724,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device5_CreateStateObject(
                                                        ppStateObject);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppStateObject->GetPointer(), ppStateObject->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device5_CreateStateObject);
+            AddObject(ppStateObject->GetPointer(), ppStateObject->GetHandlePointer(), std::move(object_info_ppStateObject), format::ApiCall_ID3D12Device5_CreateStateObject);
         }
         CheckReplayResult("ID3D12Device5_CreateStateObject", return_value, replay_result);
     }
@@ -6988,11 +6988,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device7_AddToStateObject(
     {
         MapStructObjects(pAddition->GetMetaStructPointer(), GetObjectInfoTable(), GetGpuVaTable());
         auto in_pStateObjectToGrowFrom = GetObjectInfo(pStateObjectToGrowFrom);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppNewStateObject{};
         if(!ppNewStateObject->IsNull())
         {
             ppNewStateObject->SetHandleLength(1);
-            ppNewStateObject->SetConsumerData(0, &object_info);
+            ppNewStateObject->SetConsumerData(0, &object_info_ppNewStateObject);
         }
         auto replay_result = OverrideAddToStateObject(replay_object,
                                                       return_value,
@@ -7002,7 +7002,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device7_AddToStateObject(
                                                       ppNewStateObject);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppNewStateObject->GetPointer(), ppNewStateObject->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device7_AddToStateObject);
+            AddObject(ppNewStateObject->GetPointer(), ppNewStateObject->GetHandlePointer(), std::move(object_info_ppNewStateObject), format::ApiCall_ID3D12Device7_AddToStateObject);
         }
         CheckReplayResult("ID3D12Device7_AddToStateObject", return_value, replay_result);
     }
@@ -7073,11 +7073,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device8_CreateCommittedResource2(
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
         auto in_pProtectedSession = GetObjectInfo(pProtectedSession);
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppvResource{};
         if(!ppvResource->IsNull())
         {
             ppvResource->SetHandleLength(1);
-            ppvResource->SetConsumerData(0, &object_info);
+            ppvResource->SetConsumerData(0, &object_info_ppvResource);
         }
         auto replay_result = OverrideCreateCommittedResource2(replay_object,
                                                               return_value,
@@ -7091,7 +7091,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device8_CreateCommittedResource2(
                                                               ppvResource);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device8_CreateCommittedResource2);
+            AddObject(ppvResource->GetPointer(), ppvResource->GetHandlePointer(), std::move(object_info_ppvResource), format::ApiCall_ID3D12Device8_CreateCommittedResource2);
             SetResourceDesc(ppvResource, pDesc);
         }
         CheckReplayResult("ID3D12Device8_CreateCommittedResource2", return_value, replay_result);
@@ -7556,11 +7556,11 @@ void Dx12ReplayConsumer::Process_ID3D12Device9_CreateCommandQueue1(
     auto replay_object = GetObjectInfo(object_id);
     if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        DxObjectInfo object_info{};
+        DxObjectInfo object_info_ppCommandQueue{};
         if(!ppCommandQueue->IsNull())
         {
             ppCommandQueue->SetHandleLength(1);
-            ppCommandQueue->SetConsumerData(0, &object_info);
+            ppCommandQueue->SetConsumerData(0, &object_info_ppCommandQueue);
         }
         auto replay_result = OverrideCreateCommandQueue1(replay_object,
                                                          return_value,
@@ -7570,7 +7570,7 @@ void Dx12ReplayConsumer::Process_ID3D12Device9_CreateCommandQueue1(
                                                          ppCommandQueue);
         if (SUCCEEDED(replay_result))
         {
-            AddObject(ppCommandQueue->GetPointer(), ppCommandQueue->GetHandlePointer(), std::move(object_info), format::ApiCall_ID3D12Device9_CreateCommandQueue1);
+            AddObject(ppCommandQueue->GetPointer(), ppCommandQueue->GetHandlePointer(), std::move(object_info_ppCommandQueue), format::ApiCall_ID3D12Device9_CreateCommandQueue1);
         }
         CheckReplayResult("ID3D12Device9_CreateCommandQueue1", return_value, replay_result);
     }
