@@ -18986,34 +18986,6 @@ void Dx12AsciiConsumer::Process_ID3D11Device_CheckCounter(
     );
 }
 
-void Dx12AsciiConsumer::Process_ID3D11Device_CheckFeatureSupport(
-        const ApiCallInfo& call_info,
-        format::HandleId object_id,
-        HRESULT return_value,
-        D3D11_FEATURE Feature,
-        PointerDecoder<uint8_t>* pFeatureSupportData,
-        UINT FeatureSupportDataSize)
-{
-    using namespace gfxrecon::util;
-    uint32_t tab_count = 0;
-    uint32_t tab_size = 4;
-    WriteApiCallToFileInfo writeApiCallToFileInfo{};
-    writeApiCallToFileInfo.pObjectTypeName = "ID3D11Device";
-    writeApiCallToFileInfo.handleId = object_id;
-    writeApiCallToFileInfo.pFunctionName = "CheckFeatureSupport";
-    std::string returnValue = ToString(return_value);
-    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
-    WriteApiCallToFile(
-        writeApiCallToFileInfo, tab_count, tab_size,
-        [&](std::stringstream& str_strm)
-        {
-            FieldToString(str_strm, true, "Feature", to_string_flags_, tab_count, tab_size, Quote(ToString(Feature)));
-            FieldToString(str_strm, false, "[out]pFeatureSupportData", to_string_flags_, tab_count, tab_size, PointerDecoderArrayToString(FeatureSupportDataSize, pFeatureSupportData, to_string_flags_, tab_count, tab_size));
-            FieldToString(str_strm, false, "FeatureSupportDataSize", to_string_flags_, tab_count, tab_size, ToString(FeatureSupportDataSize, to_string_flags_, tab_count, tab_size));
-        }
-    );
-}
-
 void Dx12AsciiConsumer::Process_ID3D11Device_GetPrivateData(
         const ApiCallInfo& call_info,
         format::HandleId object_id,

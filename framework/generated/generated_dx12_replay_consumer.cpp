@@ -14609,28 +14609,6 @@ void Dx12ReplayConsumer::Process_ID3D11Device_CheckCounter(
     }
 }
 
-void Dx12ReplayConsumer::Process_ID3D11Device_CheckFeatureSupport(
-    const ApiCallInfo&                          call_info,
-    format::HandleId                            object_id,
-    HRESULT                                     return_value,
-    D3D11_FEATURE                               Feature,
-    PointerDecoder<uint8_t>*                    pFeatureSupportData,
-    UINT                                        FeatureSupportDataSize)
-{
-    auto replay_object = MapObject<ID3D11Device>(object_id);
-    if (replay_object != nullptr)
-    {
-        if(!pFeatureSupportData->IsNull())
-        {
-            pFeatureSupportData->AllocateOutputData(FeatureSupportDataSize);
-        }
-        auto replay_result = replay_object->CheckFeatureSupport(Feature,
-                                                                pFeatureSupportData->GetOutputPointer(),
-                                                                FeatureSupportDataSize);
-        CheckReplayResult("ID3D11Device_CheckFeatureSupport", return_value, replay_result);
-    }
-}
-
 void Dx12ReplayConsumer::Process_ID3D11Device_GetPrivateData(
     const ApiCallInfo&                          call_info,
     format::HandleId                            object_id,

@@ -389,6 +389,172 @@ void Dx12AsciiConsumerBase::Process_ID3D12Resource_WriteToSubresource(format::Ha
     });
 }
 
+void Dx12AsciiConsumerBase::Process_ID3D11Device_CheckFeatureSupport(const ApiCallInfo& call_info,
+                                                                     format::HandleId   object_id,
+                                                                     HRESULT            return_value,
+                                                                     D3D11_FEATURE      feature,
+                                                                     const void*        capture_feature_data,
+                                                                     void*              replay_feature_data,
+                                                                     UINT               feature_data_size)
+{
+    // TODO: When used with the replay consumer, this layer could report both the feature data from capture and replay,
+    // but there needs to be a way to determine if replay_feature_data contains valid data. Normally, the consumer would
+    // allocate the replay memory, making it nullptr when no other active consumer has allocated it, but for this API
+    // call the memory is allocated by the decoder and replay_feature_data is never nullptr.
+    GFXRECON_UNREFERENCED_PARAMETER(replay_feature_data);
+
+    // clang-format off
+    using namespace gfxrecon::util;
+    uint32_t tab_count = 0;
+    uint32_t tab_size = 4;
+    WriteApiCallToFileInfo writeApiCallToFileInfo{};
+    writeApiCallToFileInfo.pObjectTypeName = "ID3D11Device";
+    writeApiCallToFileInfo.handleId = object_id;
+    writeApiCallToFileInfo.pFunctionName = "CheckFeatureSupport";
+    auto returnValue = ToString(return_value, to_string_flags_, tab_count, tab_size);
+    writeApiCallToFileInfo.pReturnValue = !returnValue.empty() ? returnValue.c_str() : nullptr;
+    WriteApiCallToFile(writeApiCallToFileInfo, tab_count, tab_size,
+        [&](std::stringstream& str_strm)
+        {
+            FieldToString(str_strm, true, "Feature", to_string_flags_, tab_count, tab_size, ToString(feature, to_string_flags_, tab_count, tab_size));
+            FieldToString(str_strm, false, "FeatureSupportDataSize", to_string_flags_, tab_count, tab_size, ToString(feature_data_size, to_string_flags_, tab_count, tab_size));
+            switch (feature)
+            {
+            case D3D11_FEATURE_THREADING:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_THREADING*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_DOUBLES:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_DOUBLES*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_FORMAT_SUPPORT:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_FORMAT_SUPPORT*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_FORMAT_SUPPORT2:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_FORMAT_SUPPORT2*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D10_X_HARDWARE_OPTIONS:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D10_X_HARDWARE_OPTIONS*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D11_OPTIONS:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D11_OPTIONS*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_ARCHITECTURE_INFO:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_ARCHITECTURE_INFO*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D9_OPTIONS:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D9_OPTIONS*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_SHADER_MIN_PRECISION_SUPPORT:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_SHADER_MIN_PRECISION_SUPPORT*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D9_SHADOW_SUPPORT:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D9_SHADOW_SUPPORT*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D11_OPTIONS1:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D11_OPTIONS1*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D9_SIMPLE_INSTANCING_SUPPORT:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D9_SIMPLE_INSTANCING_SUPPORT*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_MARKER_SUPPORT:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_MARKER_SUPPORT*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D9_OPTIONS1:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D9_OPTIONS1*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D11_OPTIONS2:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D11_OPTIONS2*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D11_OPTIONS3:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D11_OPTIONS3*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_GPU_VIRTUAL_ADDRESS_SUPPORT:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D11_OPTIONS4:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D11_OPTIONS4*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_SHADER_CACHE:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_SHADER_CACHE*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            case D3D11_FEATURE_D3D11_OPTIONS5:
+            {
+                const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_D3D11_OPTIONS5*>(capture_feature_data);
+                FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            }
+            break;
+            // TODO: This requires code generated from the 10.0.22000.194 Windows SDK
+            //case D3D11_FEATURE_DISPLAYABLE:
+            //{
+            //    const auto& captureFeatureSupportData = *reinterpret_cast<const D3D11_FEATURE_DATA_DISPLAYABLE*>(capture_feature_data);
+            //    FieldToString(str_strm, false, "pFeatureSupportData", to_string_flags_, tab_count, tab_size, ToString(captureFeatureSupportData, to_string_flags_, tab_count, tab_size));
+            //}
+            //break;
+            default:
+            break;
+            }
+        }
+    );
+    // clang-format on
+}
+
 void Dx12AsciiConsumerBase::Process_ID3D11Device_CreateBuffer(
     const ApiCallInfo&                                    call_info,
     format::HandleId                                      object_id,

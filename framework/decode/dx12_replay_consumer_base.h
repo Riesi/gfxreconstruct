@@ -126,6 +126,14 @@ class Dx12ReplayConsumerBase : public Dx12Consumer
                                                            UINT                                     src_row_pitch,
                                                            UINT src_depth_pitch) override;
 
+    virtual void Process_ID3D11Device_CheckFeatureSupport(const ApiCallInfo& call_info,
+                                                          format::HandleId   object_id,
+                                                          HRESULT            return_value,
+                                                          D3D11_FEATURE      feature,
+                                                          const void*        capture_feature_data,
+                                                          void*              replay_feature_data,
+                                                          UINT               feature_data_size) override;
+
     virtual void Process_ID3D11Device_CreateBuffer(const ApiCallInfo&                                    call_info,
                                                    format::HandleId                                      object_id,
                                                    HRESULT                                               return_value,
