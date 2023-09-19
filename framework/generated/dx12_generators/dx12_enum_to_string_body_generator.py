@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # Copyright (c) 2021 LunarG, Inc.
+# Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -29,7 +30,8 @@ class Dx12EnumToStringBodyGenerator(Dx12BaseGenerator):
 
     BITS_LIST = [
         '_FLAGS', '_STATES', '_STATUS', 'D3D12_SHADER_MIN_PRECISION_SUPPORT',
-        'D3D12_FORMAT_SUPPORT1', 'D3D12_FORMAT_SUPPORT2'
+        'D3D12_FORMAT_SUPPORT1', 'D3D12_FORMAT_SUPPORT2', 'D3D11_SHADER_MIN_PRECISION_SUPPORT',
+        'D3D11_FORMAT_SUPPORT'
     ]
 
     def __init__(
