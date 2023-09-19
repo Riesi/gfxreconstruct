@@ -5093,6 +5093,47 @@ std::string ToString(const D3D11_QUERY_DESC1& obj, ToStringFlags toStringFlags, 
     );
 }
 
+std::string ToString(const D3D11_FEATURE_DATA_VIDEO_DECODER_HISTOGRAM& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize)
+{
+    return ObjectToString(toStringFlags, tabCount, tabSize,
+        [&](std::stringstream& strStrm)
+        {
+            FieldToString(strStrm, true, "DecoderDesc", toStringFlags, tabCount, tabSize, ToString(obj.DecoderDesc, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "Components", toStringFlags, tabCount, tabSize, Quote(ToString(obj.Components)));
+            FieldToString(strStrm, false, "BinCount", toStringFlags, tabCount, tabSize, ToString(obj.BinCount, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "CounterBitDepth", toStringFlags, tabCount, tabSize, ToString(obj.CounterBitDepth, toStringFlags, tabCount, tabSize));
+        }
+    );
+}
+
+std::string ToString(const D3D11_VIDEO_DECODER_BUFFER_DESC2& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize)
+{
+    return ObjectToString(toStringFlags, tabCount, tabSize,
+        [&](std::stringstream& strStrm)
+        {
+            FieldToString(strStrm, true, "BufferType", toStringFlags, tabCount, tabSize, Quote(ToString(obj.BufferType)));
+            FieldToString(strStrm, false, "DataOffset", toStringFlags, tabCount, tabSize, ToString(obj.DataOffset, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "DataSize", toStringFlags, tabCount, tabSize, ToString(obj.DataSize, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "pIV", toStringFlags, tabCount, tabSize, HandleIdToString(obj.pIV));
+            FieldToString(strStrm, false, "IVSize", toStringFlags, tabCount, tabSize, ToString(obj.IVSize, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "pSubSampleMappingBlock", toStringFlags, tabCount, tabSize, ArrayToString(obj.SubSampleMappingCount, obj.pSubSampleMappingBlock, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "SubSampleMappingCount", toStringFlags, tabCount, tabSize, ToString(obj.SubSampleMappingCount, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "cBlocksStripeEncrypted", toStringFlags, tabCount, tabSize, ToString(obj.cBlocksStripeEncrypted, toStringFlags, tabCount, tabSize));
+            FieldToString(strStrm, false, "cBlocksStripeClear", toStringFlags, tabCount, tabSize, ToString(obj.cBlocksStripeClear, toStringFlags, tabCount, tabSize));
+        }
+    );
+}
+
+std::string ToString(const D3D11_FEATURE_DATA_D3D11_OPTIONS4& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize)
+{
+    return ObjectToString(toStringFlags, tabCount, tabSize,
+        [&](std::stringstream& strStrm)
+        {
+            FieldToString(strStrm, true, "ExtendedNV12SharedTextureSupported", toStringFlags, tabCount, tabSize, ToString(obj.ExtendedNV12SharedTextureSupported, toStringFlags, tabCount, tabSize));
+        }
+    );
+}
+
 std::string ToString(const tagRECT& obj, ToStringFlags toStringFlags, uint32_t tabCount, uint32_t tabSize)
 {
     return ObjectToString(toStringFlags, tabCount, tabSize,

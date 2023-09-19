@@ -120,8 +120,6 @@ class Dx12StateTable : public Dx12StateTableBase
     bool InsertWrapper(format::HandleId id, ID3D11VideoProcessorOutputView_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11VideoProcessorOutputView_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3D11BlendState_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11BlendState_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3DDeviceContextState_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3DDeviceContextState_Wrapper_map_); }
-    bool InsertWrapper(format::HandleId id, ID3D11VideoContext_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11VideoContext_Wrapper_map_); }
-    bool InsertWrapper(format::HandleId id, ID3D11VideoDevice_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11VideoDevice_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3D11VideoProcessorEnumerator_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11VideoProcessorEnumerator_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3DUserDefinedAnnotation_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3DUserDefinedAnnotation_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3D11Texture2D_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11Texture2D_Wrapper_map_); }
@@ -134,6 +132,9 @@ class Dx12StateTable : public Dx12StateTableBase
     bool InsertWrapper(format::HandleId id, ID3D11Fence_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11Fence_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3D11DeviceContext_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11DeviceContext_Wrapper_map_); }
     bool InsertWrapper(format::HandleId id, ID3D11Device_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11Device_Wrapper_map_); }
+    bool InsertWrapper(format::HandleId id, ID3D11Multithread_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11Multithread_Wrapper_map_); }
+    bool InsertWrapper(format::HandleId id, ID3D11VideoDevice_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11VideoDevice_Wrapper_map_); }
+    bool InsertWrapper(format::HandleId id, ID3D11VideoContext_Wrapper* wrapper) { return InsertEntry(id, wrapper, ID3D11VideoContext_Wrapper_map_); }
 
     bool RemoveWrapper(const IDXGIKeyedMutex_Wrapper* wrapper) { return RemoveEntry(wrapper, IDXGIKeyedMutex_Wrapper_map_); }
     bool RemoveWrapper(const IDXGIDisplayControl_Wrapper* wrapper) { return RemoveEntry(wrapper, IDXGIDisplayControl_Wrapper_map_); }
@@ -216,8 +217,6 @@ class Dx12StateTable : public Dx12StateTableBase
     bool RemoveWrapper(const ID3D11VideoProcessorOutputView_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11VideoProcessorOutputView_Wrapper_map_); }
     bool RemoveWrapper(const ID3D11BlendState_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11BlendState_Wrapper_map_); }
     bool RemoveWrapper(const ID3DDeviceContextState_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3DDeviceContextState_Wrapper_map_); }
-    bool RemoveWrapper(const ID3D11VideoContext_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11VideoContext_Wrapper_map_); }
-    bool RemoveWrapper(const ID3D11VideoDevice_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11VideoDevice_Wrapper_map_); }
     bool RemoveWrapper(const ID3D11VideoProcessorEnumerator_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11VideoProcessorEnumerator_Wrapper_map_); }
     bool RemoveWrapper(const ID3DUserDefinedAnnotation_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3DUserDefinedAnnotation_Wrapper_map_); }
     bool RemoveWrapper(const ID3D11Texture2D_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11Texture2D_Wrapper_map_); }
@@ -230,6 +229,9 @@ class Dx12StateTable : public Dx12StateTableBase
     bool RemoveWrapper(const ID3D11Fence_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11Fence_Wrapper_map_); }
     bool RemoveWrapper(const ID3D11DeviceContext_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11DeviceContext_Wrapper_map_); }
     bool RemoveWrapper(const ID3D11Device_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11Device_Wrapper_map_); }
+    bool RemoveWrapper(const ID3D11Multithread_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11Multithread_Wrapper_map_); }
+    bool RemoveWrapper(const ID3D11VideoDevice_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11VideoDevice_Wrapper_map_); }
+    bool RemoveWrapper(const ID3D11VideoContext_Wrapper* wrapper) { return RemoveEntry(wrapper, ID3D11VideoContext_Wrapper_map_); }
 
     void VisitWrappers(std::function<void(IDXGIKeyedMutex_Wrapper*)> visitor) const { for (auto entry : IDXGIKeyedMutex_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(IDXGIDisplayControl_Wrapper*)> visitor) const { for (auto entry : IDXGIDisplayControl_Wrapper_map_) { visitor(entry.second); } }
@@ -312,8 +314,6 @@ class Dx12StateTable : public Dx12StateTableBase
     void VisitWrappers(std::function<void(ID3D11VideoProcessorOutputView_Wrapper*)> visitor) const { for (auto entry : ID3D11VideoProcessorOutputView_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3D11BlendState_Wrapper*)> visitor) const { for (auto entry : ID3D11BlendState_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3DDeviceContextState_Wrapper*)> visitor) const { for (auto entry : ID3DDeviceContextState_Wrapper_map_) { visitor(entry.second); } }
-    void VisitWrappers(std::function<void(ID3D11VideoContext_Wrapper*)> visitor) const { for (auto entry : ID3D11VideoContext_Wrapper_map_) { visitor(entry.second); } }
-    void VisitWrappers(std::function<void(ID3D11VideoDevice_Wrapper*)> visitor) const { for (auto entry : ID3D11VideoDevice_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3D11VideoProcessorEnumerator_Wrapper*)> visitor) const { for (auto entry : ID3D11VideoProcessorEnumerator_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3DUserDefinedAnnotation_Wrapper*)> visitor) const { for (auto entry : ID3DUserDefinedAnnotation_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3D11Texture2D_Wrapper*)> visitor) const { for (auto entry : ID3D11Texture2D_Wrapper_map_) { visitor(entry.second); } }
@@ -326,6 +326,9 @@ class Dx12StateTable : public Dx12StateTableBase
     void VisitWrappers(std::function<void(ID3D11Fence_Wrapper*)> visitor) const { for (auto entry : ID3D11Fence_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3D11DeviceContext_Wrapper*)> visitor) const { for (auto entry : ID3D11DeviceContext_Wrapper_map_) { visitor(entry.second); } }
     void VisitWrappers(std::function<void(ID3D11Device_Wrapper*)> visitor) const { for (auto entry : ID3D11Device_Wrapper_map_) { visitor(entry.second); } }
+    void VisitWrappers(std::function<void(ID3D11Multithread_Wrapper*)> visitor) const { for (auto entry : ID3D11Multithread_Wrapper_map_) { visitor(entry.second); } }
+    void VisitWrappers(std::function<void(ID3D11VideoDevice_Wrapper*)> visitor) const { for (auto entry : ID3D11VideoDevice_Wrapper_map_) { visitor(entry.second); } }
+    void VisitWrappers(std::function<void(ID3D11VideoContext_Wrapper*)> visitor) const { for (auto entry : ID3D11VideoContext_Wrapper_map_) { visitor(entry.second); } }
 
     //
     // Helper functions for state initialization.
@@ -574,12 +577,6 @@ class Dx12StateTable : public Dx12StateTableBase
     ID3DDeviceContextState_Wrapper* GetID3DDeviceContextState_Wrapper(format::HandleId id) { return GetWrapper<ID3DDeviceContextState_Wrapper>(id, ID3DDeviceContextState_Wrapper_map_); }
     const ID3DDeviceContextState_Wrapper* GetID3DDeviceContextState_Wrapper(format::HandleId id) const { return GetWrapper<ID3DDeviceContextState_Wrapper>(id, ID3DDeviceContextState_Wrapper_map_); }
 
-    ID3D11VideoContext_Wrapper* GetID3D11VideoContext_Wrapper(format::HandleId id) { return GetWrapper<ID3D11VideoContext_Wrapper>(id, ID3D11VideoContext_Wrapper_map_); }
-    const ID3D11VideoContext_Wrapper* GetID3D11VideoContext_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11VideoContext_Wrapper>(id, ID3D11VideoContext_Wrapper_map_); }
-
-    ID3D11VideoDevice_Wrapper* GetID3D11VideoDevice_Wrapper(format::HandleId id) { return GetWrapper<ID3D11VideoDevice_Wrapper>(id, ID3D11VideoDevice_Wrapper_map_); }
-    const ID3D11VideoDevice_Wrapper* GetID3D11VideoDevice_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11VideoDevice_Wrapper>(id, ID3D11VideoDevice_Wrapper_map_); }
-
     ID3D11VideoProcessorEnumerator_Wrapper* GetID3D11VideoProcessorEnumerator_Wrapper(format::HandleId id) { return GetWrapper<ID3D11VideoProcessorEnumerator_Wrapper>(id, ID3D11VideoProcessorEnumerator_Wrapper_map_); }
     const ID3D11VideoProcessorEnumerator_Wrapper* GetID3D11VideoProcessorEnumerator_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11VideoProcessorEnumerator_Wrapper>(id, ID3D11VideoProcessorEnumerator_Wrapper_map_); }
 
@@ -615,6 +612,15 @@ class Dx12StateTable : public Dx12StateTableBase
 
     ID3D11Device_Wrapper* GetID3D11Device_Wrapper(format::HandleId id) { return GetWrapper<ID3D11Device_Wrapper>(id, ID3D11Device_Wrapper_map_); }
     const ID3D11Device_Wrapper* GetID3D11Device_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11Device_Wrapper>(id, ID3D11Device_Wrapper_map_); }
+
+    ID3D11Multithread_Wrapper* GetID3D11Multithread_Wrapper(format::HandleId id) { return GetWrapper<ID3D11Multithread_Wrapper>(id, ID3D11Multithread_Wrapper_map_); }
+    const ID3D11Multithread_Wrapper* GetID3D11Multithread_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11Multithread_Wrapper>(id, ID3D11Multithread_Wrapper_map_); }
+
+    ID3D11VideoDevice_Wrapper* GetID3D11VideoDevice_Wrapper(format::HandleId id) { return GetWrapper<ID3D11VideoDevice_Wrapper>(id, ID3D11VideoDevice_Wrapper_map_); }
+    const ID3D11VideoDevice_Wrapper* GetID3D11VideoDevice_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11VideoDevice_Wrapper>(id, ID3D11VideoDevice_Wrapper_map_); }
+
+    ID3D11VideoContext_Wrapper* GetID3D11VideoContext_Wrapper(format::HandleId id) { return GetWrapper<ID3D11VideoContext_Wrapper>(id, ID3D11VideoContext_Wrapper_map_); }
+    const ID3D11VideoContext_Wrapper* GetID3D11VideoContext_Wrapper(format::HandleId id) const { return GetWrapper<ID3D11VideoContext_Wrapper>(id, ID3D11VideoContext_Wrapper_map_); }
 
 
   private:
@@ -699,8 +705,6 @@ class Dx12StateTable : public Dx12StateTableBase
     std::map<format::HandleId, ID3D11VideoProcessorOutputView_Wrapper*> ID3D11VideoProcessorOutputView_Wrapper_map_;
     std::map<format::HandleId, ID3D11BlendState_Wrapper*> ID3D11BlendState_Wrapper_map_;
     std::map<format::HandleId, ID3DDeviceContextState_Wrapper*> ID3DDeviceContextState_Wrapper_map_;
-    std::map<format::HandleId, ID3D11VideoContext_Wrapper*> ID3D11VideoContext_Wrapper_map_;
-    std::map<format::HandleId, ID3D11VideoDevice_Wrapper*> ID3D11VideoDevice_Wrapper_map_;
     std::map<format::HandleId, ID3D11VideoProcessorEnumerator_Wrapper*> ID3D11VideoProcessorEnumerator_Wrapper_map_;
     std::map<format::HandleId, ID3DUserDefinedAnnotation_Wrapper*> ID3DUserDefinedAnnotation_Wrapper_map_;
     std::map<format::HandleId, ID3D11Texture2D_Wrapper*> ID3D11Texture2D_Wrapper_map_;
@@ -713,6 +717,9 @@ class Dx12StateTable : public Dx12StateTableBase
     std::map<format::HandleId, ID3D11Fence_Wrapper*> ID3D11Fence_Wrapper_map_;
     std::map<format::HandleId, ID3D11DeviceContext_Wrapper*> ID3D11DeviceContext_Wrapper_map_;
     std::map<format::HandleId, ID3D11Device_Wrapper*> ID3D11Device_Wrapper_map_;
+    std::map<format::HandleId, ID3D11Multithread_Wrapper*> ID3D11Multithread_Wrapper_map_;
+    std::map<format::HandleId, ID3D11VideoDevice_Wrapper*> ID3D11VideoDevice_Wrapper_map_;
+    std::map<format::HandleId, ID3D11VideoContext_Wrapper*> ID3D11VideoContext_Wrapper_map_;
 };
 
 GFXRECON_END_NAMESPACE(encode)

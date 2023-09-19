@@ -34,6 +34,18 @@ class Dx12EnumToStringBodyGenerator(Dx12BaseGenerator):
         'D3D11_FORMAT_SUPPORT'
     ]
 
+    # The code for filtering duplicate enum values can't easily detect a case like the following, where
+    # the enum value is calculated from another enum that includes duplicate values:
+    #   D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_Y	= ( 1 << D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_Y )
+    ALIAS_DICT = {
+        'D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_R':
+        'D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_Y',
+        'D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_G':
+        'D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_U',
+        'D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_B':
+        'D3D11_VIDEO_DECODER_HISTOGRAM_COMPONENT_FLAG_V'
+    }
+
     def __init__(
         self,
         source_dict,
@@ -66,7 +78,7 @@ class Dx12EnumToStringBodyGenerator(Dx12BaseGenerator):
             body += '    switch (value) {{\n'
             processed_values = set()
             for value in v['values']:
-                if not value['value'] in processed_values:
+                if (not value['value'] in processed_values) and (not value['name'] in self.ALIAS_DICT):
                     body += '    case {0}: return "{0}";\n'.format(value['name'])
                     processed_values.add(value['name'])
                     processed_values.add(value['value'])

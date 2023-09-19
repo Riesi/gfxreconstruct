@@ -44,6 +44,7 @@
 #include <d3d11_1.h>
 #include <d3d11_2.h>
 #include <d3d11_3.h>
+#include <d3d11_4.h>
 #include <Unknwnbase.h>
 #include <guiddef.h>
 #include <windef.h>
@@ -445,6 +446,9 @@ std::string ToString(const D3D11_TEX2D_ARRAY_RTV1& obj, ToStringFlags toStringFl
 std::string ToString(const D3D11_TEX2D_UAV1& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
 std::string ToString(const D3D11_TEX2D_ARRAY_UAV1& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
 std::string ToString(const D3D11_QUERY_DESC1& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
+std::string ToString(const D3D11_FEATURE_DATA_VIDEO_DECODER_HISTOGRAM& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
+std::string ToString(const D3D11_VIDEO_DECODER_BUFFER_DESC2& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
+std::string ToString(const D3D11_FEATURE_DATA_D3D11_OPTIONS4& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
 std::string ToString(const tagRECT& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
 std::string ToString(const tagPOINT& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
 std::string ToString(const tagSIZE& obj, ToStringFlags toStringFlags = kToString_Default, uint32_t tabCount = kToStringDefaultTabCount, uint32_t tabSize = kToStringDefaultTabSize);
