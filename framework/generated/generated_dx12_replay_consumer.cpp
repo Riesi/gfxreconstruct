@@ -9753,19 +9753,21 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_Map(
     UINT                                        MapFlags,
     StructPointerDecoder<Decoded_D3D11_MAPPED_SUBRESOURCE>* pMappedResource)
 {
-    auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
-    if (replay_object != nullptr)
+    auto replay_object = GetObjectInfo(object_id);
+    if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        auto in_pResource = MapObject<ID3D11Resource>(pResource);
+        auto in_pResource = GetObjectInfo(pResource);
         if(!pMappedResource->IsNull())
         {
             pMappedResource->AllocateOutputData(1);
         }
-        auto replay_result = replay_object->Map(in_pResource,
-                                                Subresource,
-                                                MapType,
-                                                MapFlags,
-                                                pMappedResource->GetOutputPointer());
+        auto replay_result = OverrideDeviceContextMap(replay_object,
+                                                      return_value,
+                                                      in_pResource,
+                                                      Subresource,
+                                                      MapType,
+                                                      MapFlags,
+                                                      pMappedResource);
         CheckReplayResult("ID3D11DeviceContext_Map", return_value, replay_result);
     }
 }
@@ -9776,12 +9778,13 @@ void Dx12ReplayConsumer::Process_ID3D11DeviceContext_Unmap(
     format::HandleId                            pResource,
     UINT                                        Subresource)
 {
-    auto replay_object = MapObject<ID3D11DeviceContext>(object_id);
-    if (replay_object != nullptr)
+    auto replay_object = GetObjectInfo(object_id);
+    if ((replay_object != nullptr) && (replay_object->object != nullptr))
     {
-        auto in_pResource = MapObject<ID3D11Resource>(pResource);
-        replay_object->Unmap(in_pResource,
-                             Subresource);
+        auto in_pResource = GetObjectInfo(pResource);
+        OverrideDeviceContextUnmap(replay_object,
+                                   in_pResource,
+                                   Subresource);
     }
 }
 

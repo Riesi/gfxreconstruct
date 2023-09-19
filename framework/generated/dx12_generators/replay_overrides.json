@@ -102,6 +102,10 @@
       "DispatchRays": "OverrideDispatchRays",
       "SetPipelineState1": "OverrideSetPipelineState1"
     },
+    "ID3D11DeviceContext": {
+      "Map": "OverrideDeviceContextMap",
+      "Unmap": "OverrideDeviceContextUnmap"
+    },
     "IDXGIFactory": {
       "CreateSwapChain": "OverrideCreateSwapChain"
     },
