@@ -2,10 +2,7 @@ name: CI Build
 
 # Perform CI builds for pull requests targeting the dev branches.
 
-on:
-  pull_request:
-    branches:
-      - dev
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   linux:
