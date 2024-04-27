@@ -72,9 +72,9 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows MSVC Release",
+            name: "x64 Windows MSVC Release",
             os: windows-latest,
-            artifact: "gfxreconstruct-windows-msvc-release",
+            artifact: "gfxreconstruct-x64-windows-msvc-release",
             cc: "cl", cxx: "cl"
           }
     steps:
@@ -96,8 +96,7 @@ jobs:
       with:
         name: ${{ matrix.config.artifact }}
         path: .\gfxreconstruct-dev
-
-  android:
+  win32:
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -105,43 +104,34 @@ jobs:
       matrix:
         config:
         - {
-            name: "Android Release/Debug",
-            os: ubuntu-latest,
-            artifact: "gfxreconstruct-android"
+            name: "x86 Windows MSVC Release",
+            os: windows-latest,
+            artifact: "gfxreconstruct-x86-windows-msvc-release",
+            cc: "cl", cxx: "cl"
           }
     steps:
     - name: Clone repository
       uses: actions/checkout@v1
-    - name: Update submodules
+    - name: Run build script
       run: |
-        git submodule update --init
-    - name: Gradle build
-      run: |
-        cd android
-        sh gradlew assembleRelease assembleDebug
+        python scripts\build.py --skip-check-code-style --skip-tests -a x86
     - name: Prepare artifacts
       run: |
-        mkdir gfxreconstruct-dev
-        mkdir gfxreconstruct-dev/layer
-        mkdir gfxreconstruct-dev/tools
-        cp LICENSE.txt gfxreconstruct-dev/
-        cp LICENSE_ThirdParty.txt gfxreconstruct-dev/
-        cp USAGE_android.md gfxreconstruct-dev/
-        cp layer/vk_layer_settings.txt gfxreconstruct-dev/
-        cp -r android/layer/build/intermediates/cmake/release/obj/arm64-v8a gfxreconstruct-dev/layer/
-        cp -r android/layer/build/intermediates/cmake/release/obj/armeabi-v7a gfxreconstruct-dev/layer/
-        cp android/tools/replay/build/outputs/apk/debug/replay-debug.apk gfxreconstruct-dev/tools/
-        cp android/scripts/gfxrecon.py gfxreconstruct-dev/tools/
+        copy LICENSE.txt build\windows\x86\output\bin\
+        copy LICENSE_ThirdParty.txt build\windows\x86\output\bin\
+        copy USAGE_desktop_D3D12.md build\windows\x86\output\bin\
+        copy USAGE_desktop_Vulkan.md build\windows\x86\output\bin\
+        copy layer\vk_layer_settings.txt build\windows\x86\output\bin\
+        move build\windows\x86\output\bin gfxreconstruct-dev
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
         name: ${{ matrix.config.artifact }}
-        path: ./gfxreconstruct-dev
-
+        path: .\gfxreconstruct-dev
   release:
     name: Create Release for Tag
     runs-on: ubuntu-latest
-    needs: [ linux, windows, android ]
+    needs: [ linux, windows, win32 ]
     steps:
     - name: Clone repository
       uses: actions/checkout@v1
@@ -193,19 +183,19 @@ jobs:
             type: "application/x-gtar"
           }
         - {
-            name: "Upload Windows Release Artifact",
+            name: "Upload x64 Windows Release Artifact",
             os: ubuntu-latest,
-            artifact: "gfxreconstruct-windows-msvc-release",
+            artifact: "gfxreconstruct-x64-windows-msvc-release",
             command: "zip -r",
-            suffix: "windows-msvc.zip",
+            suffix: "windows-x64-msvc.zip",
             type: "application/zip"
           }
         - {
-            name: "Upload Android Release Artifact",
+            name: "Upload x86 Windows Release Artifact",
             os: ubuntu-latest,
-            artifact: "gfxreconstruct-android",
+            artifact: "gfxreconstruct-x86-windows-msvc-release",
             command: "zip -r",
-            suffix: "android.zip",
+            suffix: "windows-x86-msvc.zip",
             type: "application/zip"
           }
     steps:
