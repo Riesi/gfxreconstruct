@@ -82,11 +82,11 @@ jobs:
     - name: Prepare artifacts
       run: |
         copy LICENSE.txt ${{ matrix.config.build_dir }}\windows\x64\output\bin\
-        copy LICENSE_ThirdParty.txt ${{ matrix.config.build_dir }}\windows\x64\output\bin\
-        copy USAGE_desktop_D3D12.md ${{ matrix.config.build_dir }}\windows\x64\output\bin\
-        copy USAGE_desktop_Vulkan.md ${{ matrix.config.build_dir }}\windows\x64\output\bin\
-        copy layer\vk_layer_settings.txt ${{ matrix.config.build_dir }}\windows\x64\output\bin\
-        move ${{ matrix.config.build_dir }}\windows\x64\output\bin gfxreconstruct-dev
+        copy LICENSE_ThirdParty.txt ${{ matrix.config.build_dir }}\windows\x86\output\bin\
+        copy USAGE_desktop_D3D12.md ${{ matrix.config.build_dir }}\windows\x86\output\bin\
+        copy USAGE_desktop_Vulkan.md ${{ matrix.config.build_dir }}\windows\x86\output\bin\
+        copy layer\vk_layer_settings.txt ${{ matrix.config.build_dir }}\windows\x86\output\bin\
+        move ${{ matrix.config.build_dir }}\windows\x86\output\bin gfxreconstruct-dev
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:
