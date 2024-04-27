@@ -81,7 +81,7 @@ jobs:
         python scripts\build.py --skip-check-code-style --skip-tests --config ${{ matrix.config.type }} -a x86
     - name: Prepare artifacts
       run: |
-        copy LICENSE.txt ${{ matrix.config.build_dir }}\windows\x64\output\bin\
+        copy LICENSE.txt ${{ matrix.config.build_dir }}\windows\x86\output\bin\
         copy LICENSE_ThirdParty.txt ${{ matrix.config.build_dir }}\windows\x86\output\bin\
         copy USAGE_desktop_D3D12.md ${{ matrix.config.build_dir }}\windows\x86\output\bin\
         copy USAGE_desktop_Vulkan.md ${{ matrix.config.build_dir }}\windows\x86\output\bin\
