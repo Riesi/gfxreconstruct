@@ -73,17 +73,35 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows MSVC Release",
+            name: "x64 Windows MSVC Release",
             os: windows-latest,
-            artifact: "gfxreconstruct-dev-windows-msvc-release",
+            artifact: "gfxreconstruct-x64-dev-windows-msvc-release",
             type: "release",
             build_dir: "build",
             cc: "cl", cxx: "cl"
           }
         - {
-            name: "Windows MSVC Debug",
+            name: "x64 Windows MSVC Debug",
             os: windows-latest,
-            artifact: "gfxreconstruct-dev-windows-msvc-debug",
+            artifact: "gfxreconstruct-x64-dev-windows-msvc-debug",
+            type: "debug",
+            build_dir: "dbuild",
+            cc: "cl", cxx: "cl"
+          }
+        - {
+            name: "x86 Windows MSVC Release",
+            os: windows-latest,
+            arch: x86,
+            artifact: "gfxreconstruct-x86-dev-windows-msvc-release",
+            type: "release",
+            build_dir: "build",
+            cc: "cl", cxx: "cl"
+          }
+        - {
+            name: "x86 Windows MSVC Debug",
+            os: windows-latest,
+            arch: x86,
+            artifact: "gfxreconstruct-x86-dev-windows-msvc-debug",
             type: "debug",
             build_dir: "dbuild",
             cc: "cl", cxx: "cl"
